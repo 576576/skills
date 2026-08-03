@@ -37,7 +37,7 @@ repo-i18n/
 └── examples/
     ├── README.md               # example index
     └── folder-structure/       # ready-to-copy en+zh+zh-Hant repo layout
-        ├── .github/workflows/  # i18n.yml workflow + render_i18n.py (colocated)
+        ├── .github/workflows/  # i18n.yml workflow (copy scripts/render_i18n.py here)
         ├── assets/             # .i18n_config / bundles / docs / templates
         └── docs/               # {code}/README.md + i18n.md + BUILD.md
 ```
@@ -45,9 +45,10 @@ repo-i18n/
 ## Quick start
 
 1. **Folder layout** — read [references/folder-layout.md](references/folder-layout.md);
-   copy [examples/folder-structure/](examples/folder-structure/) as a baseline
-   (it includes the CI workflow `i18n.yml` and the render script, colocated
-   under `.github/workflows/`).
+   copy [examples/folder-structure/](examples/folder-structure/) as a baseline.
+   The render script lives in **one place** — `scripts/render_i18n.py`: run it
+   in place with `--once` for a clean run, or copy it next to the CI workflow
+   (`.github/workflows/render_i18n.py`) for the CI mode.
 2. **Config** — set the root README language (and optional `fallback` tree) via
    [references/i18n-config.md](references/i18n-config.md)
    (`assets/.i18n_config/i18n.yml`, `root_lang` default `en`).
@@ -92,10 +93,13 @@ then push (CI regenerates `docs/i18n.md` and the READMEs).
 
 ## Render — `scripts/render_i18n.py`
 
-One script, two modes. The **default (CI) mode** is driven by the `I18N_DO` /
-`DOCS_DO` / `*_HASH` env vars (hash-check → i18n job → commit job pipeline).
-The **one-shot clean run** (former `clear_run.py`) never touches CI or
-`.github/`:
+One script, two modes. `render_i18n.py` lives in **one place** —
+`scripts/render_i18n.py`. Run it in place with `--once` for a clean run; for
+**CI mode**, copy it next to the workflow (`.github/workflows/render_i18n.py`,
+which `i18n.yml` invokes). The **default (CI) mode** is driven by the
+`I18N_DO` / `DOCS_DO` / `*_HASH` env vars (hash-check → i18n job → commit job
+pipeline). The **one-shot clean run** (former `clear_run.py`) never touches CI
+or `.github/`:
 
 ```bash
 python3 scripts/render_i18n.py                  # CI mode (env-driven)
