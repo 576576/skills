@@ -1,0 +1,37 @@
+{
+  "lang": "English",
+  "langCode": "en",
+  "langRegion": "United States",
+  "langRegionCode": ["US", "GB"],
+
+  "_comment_common": "── Common ──",
+  "appName": "FlCroc",
+
+  "_comment_nav": "── Navigation ──",
+  "dashboard": "Dashboard",
+  "send": "Send",
+  "receive": "Receive",
+  "history": "History",
+  "settings": "Settings",
+
+  "_comment_fileText": "── File / Text ──",
+  "file": "File",
+  "text": "Text",
+  "selectFiles": "Select Files",
+  "noFiles": "No files selected",
+
+  "_comment_actions": "── Actions ──",
+  "cancel": "Cancel",
+  "confirm": "Confirm",
+  "clear": "Clear",
+  "copy": "Copy",
+  "paste": "Paste",
+  "done": "Done",
+
+  "_comment_status": "── Status ──",
+  "loading": "Loading...",
+  "sending": "Sending",
+  "receiving": "Receiving",
+  "completed": "Completed",
+  "failed": "Failed"
+}

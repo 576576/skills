@@ -1,0 +1,37 @@
+{
+  "lang": "中文",
+  "langCode": "zh",
+  "langRegion": "简体",
+  "langRegionCode": ["Hans", "CN", "SG"],
+
+  "_comment_common": "── 通用 ──",
+  "appName": "FlCroc",
+
+  "_comment_nav": "── 导航 ──",
+  "dashboard": "仪表盘",
+  "send": "发送",
+  "receive": "接收",
+  "history": "历史记录",
+  "settings": "设置",
+
+  "_comment_fileText": "── 文件 / 文本 ──",
+  "file": "文件",
+  "text": "文本",
+  "selectFiles": "选择文件",
+  "noFiles": "未选择文件",
+
+  "_comment_actions": "── 操作 ──",
+  "cancel": "取消",
+  "confirm": "确认",
+  "clear": "清除",
+  "copy": "复制",
+  "paste": "粘贴",
+  "done": "完成",
+
+  "_comment_status": "── 状态 ──",
+  "loading": "加载中...",
+  "sending": "发送中",
+  "receiving": "接收中",
+  "completed": "已完成",
+  "failed": "失败"
+}
