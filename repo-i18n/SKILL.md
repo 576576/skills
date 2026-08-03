@@ -24,7 +24,8 @@ under `assets/`, and CI renders them from Markdown templates with `{{placeholder
 repo-i18n/
 ├── SKILL.md                    # this entry point
 ├── scripts/
-│   └── keyops.py               # add/ren/del/check keys across locales
+│   ├── keyops.py               # add/ren/del/check keys across locales
+│   └── clear_run.py            # one-shot doc refresh (no CI, no .github)
 ├── references/
 │   ├── folder-layout.md        # input/output folders + preset structure + app runtime
 │   ├── i18n-config.md          # assets/.i18n_config/i18n.yml (root_lang, fallback)
@@ -88,6 +89,21 @@ Use it on either `assets/bundles/*.json` or `assets/docs/*.json`. Keys starting
 with `_` are comments — `add` only touches the file you name for those, and
 `check` ignores them. After key ops, translate the placeholders, run `check`,
 then push (CI regenerates `docs/i18n.md` and the READMEs).
+
+## Clear run — `scripts/clear_run.py`
+
+A one-shot document refresh without touching CI or `.github/`:
+
+```bash
+python3 scripts/clear_run.py
+```
+
+- If `assets/docs/*.json` exists, renders `README.md` (root_lang) and
+  `docs/{code}/README.md` for every locale from `assets/templates/README.md`;
+  missing folders/files are **skipped**.
+- **Bundles are ignored** — no coverage table, no `docs/i18n.md`.
+- Otherwise, creates a minimal **Chinese** `README.md` only when it is
+  missing.
 
 ## Key facts
 
