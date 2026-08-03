@@ -13,7 +13,7 @@ Outputs (CI-generated):
     README.md                    root view of root_lang
     docs/{code}/README.md        docs view for every locale (incl. en)
 
-Driven by env: I18N_DO, DOCS_DO, BUNDLES_HASH, DOCS_HASH, TEMPLATES_HASH, VERSION
+Driven by env: I18N_DO, DOCS_DO, BUNDLES_HASH, DOCS_HASH, TEMPLATES_HASH
 """
 
 import glob
@@ -25,18 +25,6 @@ import urllib.parse
 from datetime import datetime, timezone
 
 HEADER_KEYS = 4
-
-# Template token prefixes for nested JSON containers:
-#   feat_table.*  -> {{feat_*}}     headings.*   -> {{heading_*}}
-#   arch_tree.*   -> {{arch_*}}     stack_tree.* -> {{stack_*}}
-#   ack_tree.*    -> {{ack_*}}
-CONTAINER_TOKENS = {
-    "headings": "heading",
-    "feat_table": "feat",
-    "arch_tree": "arch",
-    "stack_tree": "stack",
-    "ack_tree": "ack",
-}
 
 
 def load_json(path):
@@ -212,6 +200,22 @@ def merged_doc(code, docs_by_code, fallback_map, bundles_by_code):
     return merged
 
 
+def collect_tokens(obj, prefix=""):
+    """Flatten a doc into {dot_path: value}; dicts nest, lists become indexed
+    (features.title -> features.title.0, features.title.1, ...)."""
+    tokens = {}
+    for k, v in obj.items():
+        path = f"{prefix}.{k}" if prefix else k
+        if isinstance(v, dict):
+            tokens.update(collect_tokens(v, path))
+        elif isinstance(v, list):
+            for i, item in enumerate(v):
+                tokens[f"{path}.{i}"] = item
+        else:
+            tokens[path] = v
+    return tokens
+
+
 def render_readme(code, out_path, root_view, bundles, counts, docs_by_code, fallback_map, bundles_by_code):
     doc = merged_doc(code, docs_by_code, fallback_map, bundles_by_code)
     tpl = read_text("assets/templates/README.md")
@@ -221,33 +225,33 @@ def render_readme(code, out_path, root_view, bundles, counts, docs_by_code, fall
 
     tpl = tpl.replace("{{icon_prefix}}", icon_prefix)
     tpl = tpl.replace("{{languages}}", render_languages(doc["langCode"], doc_prefix, bundles, counts))
-    tpl = tpl.replace("{{version}}", os.environ.get("VERSION", "0.1.0"))
 
-    # Flatten nested fields into {{token}} placeholders:
-    #   headings.features -> {{heading_features}}, feat_table.platform -> {{feat_platform}}
-    def flatten(obj, prefix=""):
-        nonlocal tpl
-        for k, v in obj.items():
-            token = prefix + k
-            if isinstance(v, dict):
-                base = CONTAINER_TOKENS.get(k, k)
-                flatten(v, base + "_")
-            else:
-                value = str(v)
-                if token == "platforms" and isinstance(v, list):
-                    # platform badge: "Windows | Linux | macOS" URL-encoded
-                    value = urllib.parse.quote(" | ".join(v), safe="")
-                if token == "license":
-                    # license badge: "GPL v3" -> "GPL%20v3"
-                    value = urllib.parse.quote(value, safe="")
-                if not root_view and token in ("building", "i18n"):
-                    # docs view: body doc links become ../docs/...
-                    value = value.replace("](docs/", "](../docs/")
-                tpl = tpl.replace("{{" + token + "}}", value)
+    # whole-value tokens: platforms (URL-encoded), license (plain text)
+    if isinstance(doc.get("platforms"), list):
+        tpl = tpl.replace("{{platforms}}", urllib.parse.quote(" | ".join(doc["platforms"]), safe=""))
+    if doc.get("license") is not None:
+        tpl = tpl.replace("{{license}}", str(doc["license"]))
 
-    flatten(doc)
+    # dot-path tokens: headings.block1, features.title.0, archTree.dir1.1 ...
+    for token, value in collect_tokens(doc).items():
+        if token == "platforms":
+            continue  # handled above as a whole
+        if not root_view and token in ("building", "i18n"):
+            # docs view: body doc links become ../docs/...
+            value = value.replace("](docs/", "](../docs/")
+        tpl = tpl.replace("{{" + token + "}}", str(value))
 
-    write_text(out_path, tpl)
+    # icon is attached by the script only when assets/images/icon.png exists
+    icon_html = ""
+    if os.path.exists("assets/images/icon.png"):
+        title = doc.get("title", "")
+        icon_html = (
+            '<p align="center">\n'
+            f'  <img src="{icon_prefix}assets/images/icon.png" width="64" alt="{title}">\n'
+            '</p>\n\n'
+        )
+
+    write_text(out_path, icon_html + tpl)
 
 
 def render_i18n(hashes):
@@ -298,23 +302,28 @@ def main():
     }
 
     bundles = bundles_sorted()
-    counts = lang_counts(bundles)
+    docs_by_code = load_docs_by_code()
+    # language list: prefer bundles (app UI), else docs (non-code repos have no bundles)
+    locales = bundles if bundles else list(docs_by_code.values())
+    counts = lang_counts(locales)
     bundles_by_code = {b["langCode"]: b for b in bundles}
     _, fallback_map = parse_i18n_config()
     rl = root_lang()
 
     if i18n_do:
-        render_i18n(hashes)
-        print("Rendered docs/i18n.md")
+        if bundles:
+            render_i18n(hashes)
+            print("Rendered docs/i18n.md")
+        else:
+            print("No bundles — skipped docs/i18n.md (coverage needs bundles)")
 
     if docs_do:
-        docs_by_code = load_docs_by_code()
         # docs view for every locale (en included)
         for code in sorted(docs_by_code):
-            render_readme(code, f"docs/{code}/README.md", False, bundles, counts,
+            render_readme(code, f"docs/{code}/README.md", False, locales, counts,
                           docs_by_code, fallback_map, bundles_by_code)
         # root view for root_lang
-        render_readme(rl, "README.md", True, bundles, counts,
+        render_readme(rl, "README.md", True, locales, counts,
                       docs_by_code, fallback_map, bundles_by_code)
         print("Rendered README.md + docs/*/README.md")
 
