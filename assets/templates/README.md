@@ -8,8 +8,6 @@
   <img src="https://img.shields.io/badge/license-{{license}}-green" alt="License">
 </p>
 
----
-
 ## {{headings.block1}}
 
 {{descriptions.desc1}}
