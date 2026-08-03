@@ -302,23 +302,28 @@ def main():
     }
 
     bundles = bundles_sorted()
-    counts = lang_counts(bundles)
+    docs_by_code = load_docs_by_code()
+    # language list: prefer bundles (app UI), else docs (non-code repos have no bundles)
+    locales = bundles if bundles else list(docs_by_code.values())
+    counts = lang_counts(locales)
     bundles_by_code = {b["langCode"]: b for b in bundles}
     _, fallback_map = parse_i18n_config()
     rl = root_lang()
 
     if i18n_do:
-        render_i18n(hashes)
-        print("Rendered docs/i18n.md")
+        if bundles:
+            render_i18n(hashes)
+            print("Rendered docs/i18n.md")
+        else:
+            print("No bundles — skipped docs/i18n.md (coverage needs bundles)")
 
     if docs_do:
-        docs_by_code = load_docs_by_code()
         # docs view for every locale (en included)
         for code in sorted(docs_by_code):
-            render_readme(code, f"docs/{code}/README.md", False, bundles, counts,
+            render_readme(code, f"docs/{code}/README.md", False, locales, counts,
                           docs_by_code, fallback_map, bundles_by_code)
         # root view for root_lang
-        render_readme(rl, "README.md", True, bundles, counts,
+        render_readme(rl, "README.md", True, locales, counts,
                       docs_by_code, fallback_map, bundles_by_code)
         print("Rendered README.md + docs/*/README.md")
 

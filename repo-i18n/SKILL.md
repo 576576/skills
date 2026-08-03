@@ -120,7 +120,9 @@ matches your repo:
   (tree), and `platforms` (badge).
 - **Non-code repos** only need `headings.block1` + `headings.license` and
   `descriptions.desc1` + `descriptions.desc2`; `platforms`, `features`, and
-  `archTree` can be omitted from the docs JSON entirely.
+  `archTree` can be omitted from the docs JSON entirely. **`assets/bundles/`
+  is not created** (no app UI) — both `clear_run` and the render script
+  ignore it and skip `docs/i18n.md` (coverage needs bundles).
 
 When you copy the example, keep **only one** template as `README.md` in your
 target repo: code repos delete `README.nocode.md`; non-code repos delete
