@@ -28,13 +28,9 @@
 
 ---
 
-## 結構
+## repo-i18n
 
-```text
-skills/
-├── repo-i18n/               i18n 技能（SKILL.md + references + examples）
-└── assets/               语言包、文档内容、模板、i18n 配置
-```
+**repo-i18n** —— 管理仓库多语言文档。翻译内容保存在 `assets/docs/*.json`，由 `assets/templates/README.md` 渲染，用 `python repo-i18n/scripts/clear_run.py` 重新生成。详细指南见 `repo-i18n/references/`。
 
 ## 許可證
 

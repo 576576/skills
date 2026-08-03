@@ -28,13 +28,9 @@ A collection of reusable agent skills, starting with repo-i18n for repository in
 
 ---
 
-## Layout
+## repo-i18n
 
-```text
-skills/
-├── repo-i18n/               The i18n skill (SKILL.md + references + examples)
-└── assets/               Bundles, docs content, templates, i18n config
-```
+**repo-i18n** — Manage repository multi-language documentation. Keep translations in `assets/docs/*.json`, render READMEs from `assets/templates/README.md`, and regenerate with `python repo-i18n/scripts/clear_run.py`. Guides live in `repo-i18n/references/`.
 
 ## License
 

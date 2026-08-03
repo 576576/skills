@@ -26,11 +26,7 @@
 
 ## {{headings.block3}}
 
-```text
-{{archTree.title}}/
-├── {{archTree.dir1.0}}/               {{archTree.dir1.1}}
-└── {{archTree.dir2.0}}/               {{archTree.dir2.1}}
-```
+{{skills.repo-i18n}}
 
 ## {{headings.license}}
 

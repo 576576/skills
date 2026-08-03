@@ -12,7 +12,7 @@
   "headings": {
     "block1": "Intro",
     "block2": "Features",
-    "block3": "Layout",
+    "block3": "repo-i18n",
     "license": "License"
   },
 
@@ -28,10 +28,8 @@
     "feat2": ["Scripts", "Key ops, render, one-shot clear-run"]
   },
 
-  "_comment_block3": "── Layout ──",
-  "archTree": {
-    "title": "skills",
-    "dir1": ["repo-i18n", "The i18n skill (SKILL.md + references + examples)"],
-    "dir2": ["assets", "Bundles, docs content, templates, i18n config"]
+  "_comment_block3": "── Skill usage (one block per skill, sorted) ──",
+  "skills": {
+    "repo-i18n": "**repo-i18n** — Manage repository multi-language documentation. Keep translations in `assets/docs/*.json`, render READMEs from `assets/templates/README.md`, and regenerate with `python repo-i18n/scripts/clear_run.py`. Guides live in `repo-i18n/references/`."
   }
 }
