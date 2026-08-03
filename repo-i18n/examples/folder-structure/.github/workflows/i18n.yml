@@ -1,0 +1,135 @@
+name: build
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: write
+
+jobs:
+  # Step A — prebuild: "Check i18n & docs changes" (hash-check)
+  prebuild:
+    runs-on: ubuntu-latest
+    outputs:
+      i18n_do: ${{ steps.check.outputs.i18n_do }}
+      docs_do: ${{ steps.check.outputs.docs_do }}
+      bundles_hash: ${{ steps.check.outputs.bundles_hash }}
+      docs_hash: ${{ steps.check.outputs.docs_hash }}
+      templates_hash: ${{ steps.check.outputs.templates_hash }}
+    steps:
+      - uses: actions/checkout@v4
+      - id: check
+        run: |
+          set -e
+          # short hashes (first 8 chars of SHA256 over all files sorted)
+          BUNDLES_HASH=$(find assets/bundles -name '*.json' -print0 | sort -z | xargs -0 sha256sum | sha256sum | cut -c1-8)
+          DOCS_HASH=$(find assets/docs -name '*.json' -print0 | sort -z | xargs -0 sha256sum | sha256sum | cut -c1-8)
+          TEMPLATES_HASH=$(find assets/templates assets/.i18n_config -type f -print0 | sort -z | xargs -0 sha256sum | sha256sum | cut -c1-8)
+
+          I18N_DO=false
+          DOCS_DO=false
+
+          # commit message containing "b-doc" forces both
+          MSG="${{ github.event.head_commit.message }}"
+          if [ -n "$MSG" ] && printf '%s' "$MSG" | grep -q 'b-doc'; then
+            I18N_DO=true
+            DOCS_DO=true
+          else
+            # otherwise compare against the previous hashes in the i18n.md footer
+            PREV_BUNDLES=$(grep 'bundles:' docs/i18n.md 2>/dev/null | tail -1 | awk '{print $2}')
+            PREV_DOCS=$(grep 'docs:' docs/i18n.md 2>/dev/null | tail -1 | awk '{print $2}')
+            PREV_TEMPLATES=$(grep 'templates:' docs/i18n.md 2>/dev/null | tail -1 | awk '{print $2}')
+            if [ -n "$TEMPLATES_HASH" ] && [ "$TEMPLATES_HASH" != "$PREV_TEMPLATES" ]; then
+              I18N_DO=true; DOCS_DO=true
+            fi
+            if [ -n "$BUNDLES_HASH" ] && [ "$BUNDLES_HASH" != "$PREV_BUNDLES" ]; then
+              I18N_DO=true
+            fi
+            if [ -n "$DOCS_HASH" ] && [ "$DOCS_HASH" != "$PREV_DOCS" ]; then
+              I18N_DO=true; DOCS_DO=true
+            fi
+          fi
+
+          echo "i18n_do=$I18N_DO" >> "$GITHUB_OUTPUT"
+          echo "docs_do=$DOCS_DO" >> "$GITHUB_OUTPUT"
+          echo "bundles_hash=$BUNDLES_HASH" >> "$GITHUB_OUTPUT"
+          echo "docs_hash=$DOCS_HASH" >> "$GITHUB_OUTPUT"
+          echo "templates_hash=$TEMPLATES_HASH" >> "$GITHUB_OUTPUT"
+
+  # Step D — build jobs: validate inputs
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Validate JSON inputs
+        run: |
+          for f in assets/bundles/*.json assets/docs/*.json; do
+            jq empty "$f" || exit 1
+          done
+          echo "All JSON files are valid."
+
+  # Step B — i18n job (runs if i18n_do or docs_do is true)
+  i18n:
+    needs: prebuild
+    if: needs.prebuild.outputs.i18n_do == 'true' || needs.prebuild.outputs.docs_do == 'true'
+    runs-on: ubuntu-latest
+    env:
+      I18N_DO: ${{ needs.prebuild.outputs.i18n_do }}
+      DOCS_DO: ${{ needs.prebuild.outputs.docs_do }}
+      BUNDLES_HASH: ${{ needs.prebuild.outputs.bundles_hash }}
+      DOCS_HASH: ${{ needs.prebuild.outputs.docs_hash }}
+      TEMPLATES_HASH: ${{ needs.prebuild.outputs.templates_hash }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Generate i18n status + READMEs
+        run: python3 .github/workflows/render_i18n.py
+      - name: Upload i18n artifact
+        if: needs.prebuild.outputs.i18n_do == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: i18n-md
+          path: docs/i18n.md
+      - name: Upload READMEs artifact
+        if: needs.prebuild.outputs.docs_do == 'true'
+        uses: actions/upload-artifact@v4
+        with:
+          name: readme-md
+          path: |
+            README.md
+            docs/*/README.md
+
+  # Step C — commit job (auto-commit regenerated docs)
+  commit:
+    needs: [prebuild, i18n]
+    if: always() && (needs.prebuild.outputs.i18n_do == 'true' || needs.prebuild.outputs.docs_do == 'true')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Download i18n artifact
+        if: needs.prebuild.outputs.i18n_do == 'true'
+        uses: actions/download-artifact@v4
+        with:
+          name: i18n-md
+          path: .
+      - name: Download READMEs artifact
+        if: needs.prebuild.outputs.docs_do == 'true'
+        uses: actions/download-artifact@v4
+        with:
+          name: readme-md
+          path: .
+      - name: Commit generated docs
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add README.md docs/
+          if git diff --cached --quiet; then
+            echo "No changes to commit."
+            exit 0
+          fi
+          git commit -m "Auto commit by Github Actions - Update i18n. - Update documents. [skip ci]"
+          git pull --rebase
+          git push

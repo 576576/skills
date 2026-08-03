@@ -1,5 +1,9 @@
 # CI Pipeline (`build.yml`)
 
+A ready-to-copy version ships with the example at
+`../examples/folder-structure/.github/workflows/i18n.yml`, with the render
+script `render_i18n.py` colocated in the same folder.
+
 ```
 prebuild (hash-check) → i18n job → commit job → build-* jobs
 ```

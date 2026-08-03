@@ -35,13 +35,18 @@ repo-i18n/
 │   └── gotchas.md              # pitfalls & rules
 └── examples/
     ├── README.md               # example index
-    └── folder-structure/       # ready-to-copy minimal en+zh repo layout
+    └── folder-structure/       # ready-to-copy en+zh+zh-Hant repo layout
+        ├── .github/workflows/  # i18n.yml workflow + render_i18n.py (colocated)
+        ├── assets/             # .i18n_config / bundles / docs / templates
+        └── docs/               # {code}/README.md + i18n.md + BUILD.md
 ```
 
 ## Quick start
 
 1. **Folder layout** — read [references/folder-layout.md](references/folder-layout.md);
-   copy [examples/folder-structure/](examples/folder-structure/) as a baseline.
+   copy [examples/folder-structure/](examples/folder-structure/) as a baseline
+   (it includes the CI workflow `i18n.yml` and the render script, colocated
+   under `.github/workflows/`).
 2. **Config** — set the root README language (and optional `fallback` tree) via
    [references/i18n-config.md](references/i18n-config.md)
    (`assets/.i18n_config/i18n.yml`, `root_lang` default `en`).
