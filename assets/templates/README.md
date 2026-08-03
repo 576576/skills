@@ -22,7 +22,10 @@
 
 | {{heading_features}} |
 |---|
-| {{feat_feature1}} |
+| {{feat_platform}} |
+| {{feat_encryption}} |
+| {{feat_i18n}} |
+| {{feat_theme}} |
 
 ---
 
@@ -36,7 +39,9 @@
 
 ```
 {{title}}/
-├── dir1/               {{arch_dir1}}
+├── repo-i18n/         {{arch_skill}}
+├── assets/            {{arch_assets}}
+├── .github/workflows/ {{arch_ci}}
 └── (platform)/
 ```
 
@@ -44,9 +49,13 @@
 
 ## {{heading_stack}}
 
-| {{heading_stack}} |
-|---|
-| {{stack_row1}} |
+| {{stack_col_layer}} | {{stack_col_tech}} |
+|-------|------------|
+| {{stack_l_ui}} | {{stack_ui}} |
+| {{stack_l_state}} | {{stack_state}} |
+| {{stack_l_backend}} | {{stack_backend}} |
+| {{stack_l_i18n}} | {{stack_i18n}} |
+| {{stack_l_ci}} | {{stack_ci}} |
 
 ---
 
@@ -58,12 +67,13 @@
 
 ## {{heading_acknowledgments}}
 
-| {{heading_acknowledgments}} |
-|---|
-| {{ack_key1}} |
+| {{ack_col_project}} | {{ack_col_desc}} |
+|---------|-------------|
+| Your core framework | {{ack_framework}} |
+| Supporting tool / library | {{ack_tool}} |
 
 ---
 
 ## {{heading_license}}
 
-GPL3 © {{title}} Contributors
+MIT © {{title}} Contributors

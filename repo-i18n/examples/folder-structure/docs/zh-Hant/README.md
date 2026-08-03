@@ -5,7 +5,7 @@
 <h1 align="center">YourApp</h1>
 
 <p align="center">
-<a href="../zh-Hant/README.md">中文 (繁體)</a> &nbsp;|&nbsp; 中文 (简体) &nbsp;|&nbsp; <a href="../en/README.md">English</a>
+中文 (繁體) &nbsp;|&nbsp; <a href="../zh/README.md">中文 (简体)</a> &nbsp;|&nbsp; <a href="../en/README.md">English</a>
 </p>
 
 <p align="center">
@@ -14,25 +14,25 @@
   <img alt="version" src="https://img.shields.io/badge/version-1.2.3-informational" />
 </p>
 
-<em>应用的一句话简介</em>
+<em>應用的一句話簡介</em>
 
 ---
 
-## 特性
+## 功能特性
 
-| 特性 |
+| 功能特性 |
 |---|
 | 描述1 |
 
 ---
 
-## 构建
+## 構建
 
-构建说明请参阅 [BUILD.md](../docs/BUILD.md)。
+構建說明請參閱 [BUILD.md](../docs/BUILD.md)。
 
 ---
 
-## 架构
+## 架構
 
 ```
 YourApp/
@@ -42,28 +42,28 @@ YourApp/
 
 ---
 
-## 技术栈
+## 技術棧
 
-| 技术栈 |
+| 技術棧 |
 |---|
 | 描述1 |
 
 ---
 
-## 国际化
+## 國際化
 
-语言状态请参阅 [docs/i18n.md](../docs/i18n.md)。
+語言狀態請參閱 [docs/i18n.md](../docs/i18n.md)。
 
 ---
 
-## 致谢
+## 鳴謝
 
-| 致谢 |
+| 鳴謝 |
 |---|
 | 描述1 |
 
 ---
 
-## 许可证
+## 許可證
 
 GPL3 © YourApp Contributors

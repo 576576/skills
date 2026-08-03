@@ -3,18 +3,18 @@
 ## Placeholders
 
 `assets/templates/README.md` uses `{{token}}` placeholders, e.g.:
-`{{icon_prefix}}`, `{{languages}}`, `{{title}}`, `{{version}}`, `{{flutter_version}}`,
-`{{croc_version}}`, `{{tagline_block}}`, `{{heading_*}}`, `{{feat_*}}`, `{{building}}`,
+`{{icon_prefix}}`, `{{languages}}`, `{{title}}`, `{{version}}`, `{{platforms}}`,
+`{{license}}`, `{{tagline_block}}`, `{{heading_*}}`, `{{feat_*}}`, `{{building}}`,
 `{{arch_*}}`, `{{stack_*}}`, `{{i18n}}`, `{{ack_*}}`.
 
-`assets/templates/i18n.md` uses: `{{date}}`, `{{rows}}`, `{{bundles_hash}}`,
-`{{docs_hash}}`, `{{templates_hash}}`.
+`assets/templates/i18n.md` uses: `{{title}}`, `{{date}}`, `{{rows}}`,
+`{{bundles_hash}}`, `{{docs_hash}}`, `{{templates_hash}}`.
 
 ## Example README (template excerpt)
 
 ```markdown
 <p align="center">
-  <img src="{{icon_prefix}}assets/images/icon.png" width="64" alt="FlCroc">
+  <img src="{{icon_prefix}}assets/images/icon.png" width="64" alt="{{title}}">
 </p>
 
 <h1 align="center">{{title}}</h1>
@@ -24,7 +24,7 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/platform-Android%20%7C%20Windows%20%7C%20Linux-blue" alt="Platform">
+  <img src="https://img.shields.io/badge/platform-{{platforms}}-blue" alt="Platform">
   <img alt="version" src="https://img.shields.io/badge/version-{{version}}-informational" />
 </p>
 
@@ -32,11 +32,11 @@
 
 ---
 
-## ✨ {{heading_features}}
+## {{heading_features}}
 
-| | {{heading_features}} |
-|---|-----|
-| 🖥️ | {{feat_platform}} |
+| {{heading_features}} |
+|---|
+| {{feat_feature1}} |
 ...
 ```
 
@@ -44,10 +44,10 @@
 
 ```markdown
 <p align="center">
-  <img src="assets/images/icon.png" width="64" alt="FlCroc">
+  <img src="assets/images/icon.png" width="64" alt="YourApp">
 </p>
 
-<h1 align="center">FlCroc</h1>
+<h1 align="center">YourApp</h1>
 
 <p align="center">
 <a href="docs/zh/README.md">中文 (简体)</a> &nbsp;|&nbsp; <a href="docs/ja/README.md">日本語</a> &nbsp;|&nbsp; English

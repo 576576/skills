@@ -1,0 +1,59 @@
+{
+  "_comment_meta": "── Meta ──",
+  "lang": "English",
+  "langCode": "en",
+  "langRegion": "United States",
+  "langRegionCode": ["US", "GB"],
+  "platforms": ["Windows", "Linux", "macOS"],
+  "license": "MIT",
+  "title": "Skills",
+  "tagline_block": "A collection of reusable agent skills — starting with repo-i18n for repository internationalization",
+
+  "_comment_features": "── Features ──",
+  "feat_table": {
+    "platform": "Reusable across any repo and agent environment",
+    "encryption": "Self-contained skills with references & examples",
+    "i18n": "Multi-language docs via JSON bundles (en / zh / zh-Hant)",
+    "theme": "CI-driven README generation from templates"
+  },
+
+  "_comment_headings": "── Section Headings ──",
+  "headings": {
+    "features": "Features",
+    "build": "Build",
+    "architecture": "Architecture",
+    "stack": "Tech Stack",
+    "i18n": "I18n",
+    "acknowledgments": "Acknowledgments",
+    "license": "License"
+  },
+
+  "_comment_content": "── Content Blocks ──",
+  "building": "See [BUILD.md](docs/BUILD.md) for instructions on adding a new skill.",
+  "arch_tree": {
+    "skill": "The repo-i18n skill (SKILL.md + references/ + examples/)",
+    "assets": "I18n JSON bundles, docs content, templates",
+    "ci": "CI/CD (build.yml)"
+  },
+  "stack_tree": {
+    "col_layer": "Layer",
+    "col_tech": "Technology",
+    "l_ui": "Content",
+    "l_state": "Structure",
+    "l_backend": "Generation",
+    "l_i18n": "I18n",
+    "l_ci": "CI/CD",
+    "ui": "Markdown · JSON",
+    "state": "Skill folders (SKILL.md + references + examples)",
+    "backend": "Template rendering + CI regeneration",
+    "i18n": "JSON bundles",
+    "ci": "GitHub Actions"
+  },
+  "i18n": "See [docs/i18n.md](docs/i18n.md) for language status and contribution guide.",
+  "ack_tree": {
+    "col_project": "Project",
+    "col_desc": "Description",
+    "framework": "VS Code / Claude agent skills",
+    "tool": "GitHub Actions · JSON i18n pipeline"
+  }
+}

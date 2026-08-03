@@ -1,0 +1,59 @@
+{
+  "_comment_meta": "── 元信息 ──",
+  "lang": "中文",
+  "langCode": "zh",
+  "langRegion": "简体",
+  "langRegionCode": ["Hans", "CN", "SG"],
+  "platforms": ["Windows", "Linux", "macOS"],
+  "license": "MIT",
+  "title": "Skills",
+  "tagline_block": "可复用的智能体技能集合——以 repo-i18n（仓库国际化）为起点",
+
+  "_comment_features": "── 特性 ──",
+  "feat_table": {
+    "platform": "可在任意仓库和智能体环境中复用",
+    "encryption": "自带引用与示例的完整技能",
+    "i18n": "通过 JSON 语言包实现多语言文档（en / zh / zh-Hant）",
+    "theme": "由 CI 基于模板自动生成 README"
+  },
+
+  "_comment_headings": "── 章节标题 ──",
+  "headings": {
+    "features": "特性",
+    "build": "构建",
+    "architecture": "架构",
+    "stack": "技术栈",
+    "i18n": "国际化",
+    "acknowledgments": "致谢",
+    "license": "许可证"
+  },
+
+  "_comment_content": "── 内容块 ──",
+  "building": "添加新技能的说明请参阅 [BUILD.md](docs/BUILD.md)。",
+  "arch_tree": {
+    "skill": "repo-i18n 技能（SKILL.md + references/ + examples/）",
+    "assets": "I18n JSON 语言包、文档内容、模板",
+    "ci": "CI/CD（build.yml）"
+  },
+  "stack_tree": {
+    "col_layer": "层",
+    "col_tech": "技术",
+    "l_ui": "内容",
+    "l_state": "结构",
+    "l_backend": "生成",
+    "l_i18n": "国际化",
+    "l_ci": "CI/CD",
+    "ui": "Markdown · JSON",
+    "state": "技能目录（SKILL.md + references + examples）",
+    "backend": "模板渲染 + CI 自动再生",
+    "i18n": "JSON 语言包",
+    "ci": "GitHub Actions"
+  },
+  "i18n": "语言状态与贡献指南请参阅 [docs/i18n.md](docs/i18n.md)。",
+  "ack_tree": {
+    "col_project": "项目",
+    "col_desc": "说明",
+    "framework": "VS Code / Claude 智能体技能",
+    "tool": "GitHub Actions · JSON 国际化流水线"
+  }
+}

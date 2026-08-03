@@ -58,14 +58,16 @@ Outputs: `i18n_do`, `docs_do`, `bundles_hash`, `docs_hash`, `templates_hash`.
 
 ## Step C — commit job (depends on prebuild + test)
 
-- Applies version bump to `pubspec.yaml` (from `new_build` output).
+- Applies version bump to the project version file (e.g. `pubspec.yaml`,
+  `package.json`) from the `new_build` output.
 - Downloads `i18n-md` and/or `readme-md` artifacts.
 - Commit message: `Auto commit by Github Actions` + lines like
   `- Update i18n.` / `- Update documents.` / `- Update build number N.`, suffixed `[skip ci]`.
 - `git pull --rebase` before push.
-- Uploads `pubspec-synced` artifact (updated `pubspec.yaml`) for build jobs to
+- Uploads a `version-synced` artifact (updated version file) for build jobs to
   download, so they use the bumped version.
 
 ## Step D — build jobs
 
-- `actions/download-artifact@v4` `pubspec-synced` → ensures builds use the latest version.
+- `actions/download-artifact@v4` the `version-synced` artifact → ensures builds
+  use the latest version.

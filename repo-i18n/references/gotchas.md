@@ -9,9 +9,13 @@
   used by hash-check. If it's missing, hashes compare against empty and CI
   regenerates everything once.
 - `_`-prefixed keys are comments in bundles — don't translate them, don't count them.
-- Keep `assets/bundles`, `assets/docs`, `assets/templates`, `lib/l10n`, and
-  `pubspec.yaml` (assets section) in sync — adding a key to `app_localizations.dart`
-  without the JSON files breaks the app's fallback (returns the raw key).
+- Fallback follows `assets/.i18n_config/i18n.yml`'s `fallback` tree when it has
+  content (default: variant → base → en). The tree is **recursive** — a hop's
+  own chain continues after it. Keep the tree consistent with the locales you
+  actually ship — a chain pointing to a missing locale is skipped.
+- Keep `assets/bundles`, `assets/docs`, `assets/templates`, and the app's
+  locale/key registry in sync — adding a key in the app code without the JSON
+  files breaks the app's fallback (returns the raw key).
 - `sort -r` gives the language ordering in `docs/i18n.md` (zh-Hant, zh, ja, fr, en).
 - sed separator choice: template contains `/`, `#`, `|` — prefer `s#...#...#` and
   escape `&` inside replacements (`\&`).

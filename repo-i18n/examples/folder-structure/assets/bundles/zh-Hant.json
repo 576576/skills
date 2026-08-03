@@ -1,0 +1,37 @@
+{
+  "lang": "中文",
+  "langCode": "zh-Hant",
+  "langRegion": "繁體",
+  "langRegionCode": ["Hant", "TW", "HK", "MO"],
+
+  "_comment_common": "── 通用 ──",
+  "appName": "YourApp",
+
+  "_comment_nav": "── 導航 ──",
+  "dashboard": "儀表板",
+  "send": "傳送",
+  "receive": "接收",
+  "history": "歷史記錄",
+  "settings": "設定",
+
+  "_comment_fileText": "── 檔案 / 文字 ──",
+  "file": "檔案",
+  "text": "文字",
+  "selectFiles": "選擇檔案",
+  "noFiles": "未選擇檔案",
+
+  "_comment_actions": "── 操作 ──",
+  "cancel": "取消",
+  "confirm": "確定",
+  "clear": "清除",
+  "copy": "複製",
+  "paste": "貼上",
+  "done": "完成",
+
+  "_comment_status": "── 狀態 ──",
+  "loading": "載入中...",
+  "sending": "傳送中",
+  "receiving": "接收中",
+  "completed": "已完成",
+  "failed": "失敗"
+}

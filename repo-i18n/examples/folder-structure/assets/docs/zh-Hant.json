@@ -1,0 +1,40 @@
+{
+  "_comment_meta": "── 元數據 ──",
+  "lang": "中文",
+  "langCode": "zh-Hant",
+  "langRegion": "繁體",
+  "langRegionCode": ["Hant", "TW", "HK", "MO"],
+  "platforms": ["Android", "Windows", "Linux"],
+  "license": "GPL v3",
+  "title": "YourApp",
+  "tagline_block": "應用的一句話簡介",
+
+  "_comment_headings": "── 章節標題 ──",
+  "headings": {
+    "features": "功能特性",
+    "build": "構建",
+    "architecture": "架構",
+    "stack": "技術棧",
+    "i18n": "國際化",
+    "acknowledgments": "鳴謝",
+    "license": "許可證"
+  },
+
+  "_comment_features": "── 功能特性 ──",
+  "feat_table": {
+    "feature1": "描述1"
+  },
+
+  "_comment_content": "── 內容區塊 ──",
+  "building": "構建說明請參閱 [BUILD.md](docs/BUILD.md)。",
+  "arch_tree": {
+    "dir1": "描述1"
+  },
+  "stack_tree": {
+    "row1": "描述1"
+  },
+  "i18n": "語言狀態請參閱 [docs/i18n.md](docs/i18n.md)。",
+  "ack_tree": {
+    "key1": "描述1"
+  }
+}

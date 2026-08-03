@@ -1,83 +1,69 @@
 <p align="center">
-  <img src="assets/images/icon.png" width="64" alt="FlCroc">
+  <img src="assets/images/icon.png" width="64" alt="YourApp">
 </p>
 
-<h1 align="center">FlCroc</h1>
+<h1 align="center">YourApp</h1>
 
 <p align="center">
-<a href="docs/zh/README.md">中文 (简体)</a> &nbsp;|&nbsp; English
+<a href="docs/zh-Hant/README.md">中文 (繁體)</a> &nbsp;|&nbsp; <a href="docs/zh/README.md">中文 (简体)</a> &nbsp;|&nbsp; English
 </p>
 
 <p align="center">
   <img src="https://img.shields.io/badge/platform-Android%20%7C%20Windows%20%7C%20Linux-blue" alt="Platform">
-  <img src="https://img.shields.io/badge/license-GPL v3-green" alt="License">
+  <img src="https://img.shields.io/badge/license-GPL%20v3-green" alt="License">
   <img alt="version" src="https://img.shields.io/badge/version-1.2.3-informational" />
 </p>
 
-<em>A Flutter GUI for croc — easily and securely transfer files between computers</em>
+<em>A one-line description of your app</em>
 
 ---
 
-## ✨ Features
+## Features
 
-| | Features |
-|---|-----|
-| 🖥️ | Cross-platform (Windows, Linux, Android) |
-| 🔒 | End-to-end encrypted file transfer via croc |
-| 🌍 | Native multi-language support |
-| 🌙 | Modern Flutter UI with adaptive layout |
+| Features |
+|---|
+| desc1 |
 
 ---
 
-## 🚀 Build
+## Build
 
-See [BUILD.md](docs/BUILD.md) for build instructions and platform-specific guides.
+See [BUILD.md](docs/BUILD.md).
 
 ---
 
-## 🏗️ Architecture
+## Architecture
 
 ```
-FlCroc/
-├── lib/               Flutter app (Riverpod + Material 3)
-├── go_bridge/         Go CGO shared library (FFI bridge)
-├── submodules/croc/   Vendored croc source
-├── assets/            App icon, I18n JSON bundles
-├── .github/workflows/ CI/CD (build.yml)
+YourApp/
+├── dir1/               desc1
 └── (platform)/
 ```
 
 ---
 
-## 🧰 Tech Stack
+## Tech Stack
 
-| Layer | Technology |
-|-------|------------|
-| UI | Flutter 3.x · Material 3 |
-| State | Riverpod · Freezed |
-| Backend | Go CGO FFI · croc submodule |
-| I18n | JSON bundles |
-| CI/CD | GitHub Actions |
+| Tech Stack |
+|---|
+| desc1 |
 
 ---
 
-## 🌍 I18n
+## I18n
 
-See [docs/i18n.md](docs/i18n.md) for language status and contribution guide.
-
----
-
-## 🙏 Acknowledgments
-
-| Project | Description |
-|---------|-------------|
-| [croc](https://github.com/schollz/croc) | Backend file transfer engine |
-| [Flutter](https://flutter.dev) | Cross-platform UI framework |
-| [FlClash](https://github.com/chen08209/FlClash) | UI inspiration |
-| [croc-app](https://github.com/Dking08/croc-app) | QR scanner reference |
+See [docs/i18n.md](docs/i18n.md).
 
 ---
 
-## 📄 License
+## Acknowledgments
 
-GPL3 © FlCroc Contributors
+| Acknowledgments |
+|---|
+| desc1 |
+
+---
+
+## License
+
+GPL3 © YourApp Contributors

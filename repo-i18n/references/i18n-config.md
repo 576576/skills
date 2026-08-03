@@ -18,6 +18,51 @@ root_lang: en
 - Changing `root_lang` changes the hash (`TEMPLATES_HASH` covers
   `assets/.i18n_config/`) and forces full regeneration.
 
+## `fallback` (optional) — fallback tree
+
+Defines how missing translation keys are resolved, **overriding the default
+fallback behavior**. It is only read when the key is present **and non-empty**.
+
+### Default behavior (no `fallback`)
+
+- A **variant** locale (e.g. `zh-Hant`) falls back to its **base** locale (`zh`,
+  the code before the first `-`), then to `en`.
+- Any other locale falls back to `en`; `en` itself never falls back.
+
+### Overriding with a fallback tree
+
+The `fallback` key stays in place but its entries are **commented out by
+default**, so the default behavior applies; uncomment the entries to enable:
+
+```yaml
+root_lang: en
+
+fallback:
+  # zh-Hant: [zh, en]   # variant falls back to zh, then en
+  # zh: [en]            # zh falls back to en
+  # en: []              # empty chain = no fallback
+```
+
+When enabled:
+
+- Key = locale code; value = **ordered** list of locale codes to fall back to
+  (first listed = highest priority).
+- **Listed** locales use their configured chain instead of the default;
+  **unlisted** locales keep the default behavior.
+- An empty chain (`en: []`) means "no fallback".
+- **Fallback is recursive**: after a locale's own chain is exhausted, each hop
+  contributes its own (configured or default) chain — e.g. `zh-Hant: [zh]`
+  with `zh: [en]` resolves to `zh → en`. Cycles are broken and every locale is
+  visited at most once.
+
+### How it's used
+
+- **Runtime (app)**: a missing key walks the chain and returns the first hit.
+- **Coverage (CI)**: a locale's effective key set = its own keys ∪ every key
+  along its chain, so variants with few keys still report full coverage.
+- Changing the tree changes `TEMPLATES_HASH` (the config is folded into it), so
+  CI re-renders the i18n table and READMEs.
+
 ## How CI reads it
 
 ```bash
