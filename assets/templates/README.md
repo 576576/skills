@@ -5,7 +5,6 @@
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/platform-{{platforms}}-blue" alt="Platform">
   <img src="https://img.shields.io/badge/license-{{license}}-green" alt="License">
 </p>
 

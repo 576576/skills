@@ -116,7 +116,9 @@ python3 scripts/render_i18n.py --once --no-code # non-code repo (no app UI)
   created.
 - `--no-code` explicitly declares a **non-code** repo (no app UI): even if
   `assets/bundles/` exists it is ignored, and `docs/i18n.md` is never written
-  (the coverage table needs bundles). Use it for docs/content-only repos.
+  (the coverage table needs bundles). The `platforms` key is **dropped before
+  rendering** — no platform badge appears even if the docs JSON still has it.
+  Use it for docs/content-only repos.
 
 ## Templates — code vs no-code repos
 
@@ -132,11 +134,11 @@ matches your repo:
   `headings.block1/2/3`, `descriptions`, `features` (table), `archTree`
   (tree), and `platforms` (badge).
 - **Non-code repos** only need `headings.block1` + `headings.license` and
-  `descriptions.desc1` + `descriptions.desc2`; `platforms`, `features`, and
-  `archTree` can be omitted from the docs JSON entirely. **`assets/bundles/`
-  is not created** (no app UI) — `render_i18n.py` ignores it and skips
-  `docs/i18n.md` (coverage needs bundles); non-code repos run with
-  `--once --no-code`.
+  `descriptions.desc1` + `descriptions.desc2`; `features` and `archTree` can be
+  omitted from the docs JSON entirely. Run with `--once --no-code`: the
+  `platforms` key is **removed before rendering** (no platform badge) even if
+  it is still present, `assets/bundles/` is not created (no app UI), and
+  `docs/i18n.md` is skipped (coverage needs bundles).
 
 When you copy the example, keep **only one** template as `README.md` in your
 target repo: code repos delete `README.nocode.md`; non-code repos delete

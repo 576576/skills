@@ -233,8 +233,13 @@ def collect_tokens(obj, prefix=""):
     return tokens
 
 
-def render_readme(code, out_path, root_view, objs, counts, docs_by_code, fallback_map):
+def render_readme(code, out_path, root_view, objs, counts, docs_by_code,
+                  fallback_map, no_code=False):
     doc = merged_doc(code, docs_by_code, fallback_map)
+    if no_code:
+        # non-code repos have no platform — drop the key before rendering so
+        # no platform badge appears even if the docs JSON still has `platforms`.
+        doc.pop("platforms", None)
     tpl = read_text("assets/templates/README.md")
     if tpl is None:
         return False  # missing template -> skip
@@ -252,6 +257,11 @@ def render_readme(code, out_path, root_view, objs, counts, docs_by_code, fallbac
                           urllib.parse.quote(" | ".join(doc["platforms"]), safe=""))
     if doc.get("license") is not None:
         tpl = tpl.replace("{{license}}", str(doc["license"]))
+
+    # drop any leftover {{platforms}} line (no-code, or JSON without platforms)
+    if "{{platforms}}" in tpl:
+        tpl = "\n".join(line for line in tpl.splitlines()
+                        if "{{platforms}}" not in line)
 
     # dot-path tokens: headings.block1, features.title.0, archTree.dir1.1 ...
     for token, value in collect_tokens(doc).items():
@@ -398,9 +408,9 @@ def main(argv=None):
     if docs_do:
         for code in sorted(docs_by_code):
             render_readme(code, f"docs/{code}/README.md", False,
-                          objs, counts, docs_by_code, fallback_map)
+                          objs, counts, docs_by_code, fallback_map, args.no_code)
         render_readme(rl, "README.md", True,
-                      objs, counts, docs_by_code, fallback_map)
+                      objs, counts, docs_by_code, fallback_map, args.no_code)
         print(f"Rendered README.md + {len(docs_by_code)} docs/{{code}}/README.md")
 
 
