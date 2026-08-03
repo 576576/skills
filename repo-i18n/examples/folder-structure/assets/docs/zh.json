@@ -4,9 +4,8 @@
   "langCode": "zh",
   "langRegion": "简体",
   "langRegionCode": ["Hans", "CN", "SG"],
-  "platforms": ["Android", "Windows", "Linux"],
-  "license": "GPL v3",
-  "title": "YourApp",
+  "license": "开源协议名",
+  "title": "应用名",
   "tagline_block": "应用的一句话简介",
 
   "_comment_headings": "── 章节标题 ──",
@@ -26,7 +25,7 @@
   },
 
   "_comment_content": "── 内容块 ──",
-  "building": "构建说明请参阅 [BUILD.md](docs/BUILD.md)。",
+  "building": "展示如何构建。",
   "arch_tree": {
     "dir1": "描述1"
   },

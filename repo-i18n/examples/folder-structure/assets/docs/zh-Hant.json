@@ -4,9 +4,6 @@
   "langCode": "zh-Hant",
   "langRegion": "繁體",
   "langRegionCode": ["Hant", "TW", "HK", "MO"],
-  "platforms": ["Android", "Windows", "Linux"],
-  "license": "GPL v3",
-  "title": "YourApp",
   "tagline_block": "應用的一句話簡介",
 
   "_comment_headings": "── 章節標題 ──",

@@ -5,9 +5,9 @@
   "langRegion": "United States",
   "langRegionCode": ["US", "GB"],
   "platforms": ["Android", "Windows", "Linux"],
-  "license": "GPL v3",
-  "title": "YourApp",
-  "tagline_block": "A one-line description of your app",
+  "license": "LicenseName",
+  "title": "AppName",
+  "tagline_block": "A description of the app",
 
   "_comment_headings": "── Section Headings ──",
   "headings": {
