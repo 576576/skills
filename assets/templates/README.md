@@ -20,7 +20,6 @@
  {{features.title.0}} | {{features.title.1}}
  --- | ---
  {{features.feat1.0}} | {{features.feat1.1}}
- {{features.feat2.0}} | {{features.feat2.1}}
 
 ---
 

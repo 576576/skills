@@ -1,7 +1,3 @@
-<p align="center">
-  <img src="../../assets/images/icon.png" width="64" alt="Skills">
-</p>
-
 <h1 align="center">Skills</h1>
 
 <p align="center">
@@ -17,20 +13,19 @@
 
 ## Intro
 
-A collection of reusable agent skills, starting with repo-i18n for repository internationalization.
+A collection of reusable agent skills created by 576576.
 
 ## Features
 
  Skill | Purpose
  --- | ---
- repo-i18n | Multi-language docs via JSON bundles
- Scripts | Key ops, render, one-shot clear-run
+ repo-i18n | Manage multi-language docs via JSON
 
 ---
 
 ## repo-i18n
 
-**repo-i18n** — Manage repository multi-language documentation. Keep translations in `assets/docs/*.json`, render READMEs from `assets/templates/README.md`, and regenerate with `python repo-i18n/scripts/clear_run.py`. Guides live in `repo-i18n/references/`.
+**repo-i18n** — Multi-language repo docs: translations in JSON, rendered from templates, one-shot refresh via `clear_run.py`.
 
 ## License
 

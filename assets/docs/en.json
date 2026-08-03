@@ -18,18 +18,17 @@
 
   "_comment_block1": "── Intro ──",
   "descriptions": {
-    "desc1": "A collection of reusable agent skills, starting with repo-i18n for repository internationalization."
+    "desc1": "A collection of reusable agent skills created by 576576."
   },
 
   "_comment_block2": "── Features ──",
   "features": {
     "title": ["Skill", "Purpose"],
-    "feat1": ["repo-i18n", "Multi-language docs via JSON bundles"],
-    "feat2": ["Scripts", "Key ops, render, one-shot clear-run"]
+    "feat1": ["repo-i18n", "Manage multi-language docs via JSON"]
   },
 
   "_comment_block3": "── Skill usage (one block per skill, sorted) ──",
   "skills": {
-    "repo-i18n": "**repo-i18n** — Manage repository multi-language documentation. Keep translations in `assets/docs/*.json`, render READMEs from `assets/templates/README.md`, and regenerate with `python repo-i18n/scripts/clear_run.py`. Guides live in `repo-i18n/references/`."
+    "repo-i18n": "**repo-i18n** — Multi-language repo docs: translations in JSON, rendered from templates, one-shot refresh via `clear_run.py`."
   }
 }
