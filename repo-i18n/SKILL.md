@@ -23,6 +23,8 @@ under `assets/`, and CI renders them from Markdown templates with `{{placeholder
 ```
 repo-i18n/
 ├── SKILL.md                    # this entry point
+├── scripts/
+│   └── keyops.py               # add/ren/del/check keys across locales
 ├── references/
 │   ├── folder-layout.md        # input/output folders + preset structure + app runtime
 │   ├── i18n-config.md          # assets/.i18n_config/i18n.yml (root_lang, fallback)
@@ -52,6 +54,33 @@ repo-i18n/
 6. **Workflows** — add/update languages or change the root language per
    [references/workflows.md](references/workflows.md); always mind
    [references/gotchas.md](references/gotchas.md).
+
+## Key operations — `scripts/keyops.py`
+
+When you add, rename, or remove a translation key, keep every locale's JSON in
+sync with one command instead of hand-editing each file. **Prefer the script;
+manual model edits are only a final fallback.**
+
+```bash
+python3 scripts/keyops.py add   assets/bundles/en.json  newKey   "English value"
+python3 scripts/keyops.py ren   assets/bundles/en.json  oldKey   newKey
+python3 scripts/keyops.py del   assets/bundles/en.json  oldKey
+python3 scripts/keyops.py check assets/bundles/en.json
+```
+
+- `add <json> <key> [value]` — adds the key to **every** locale file in the
+  same folder; the named file gets `value` (default `""`), the others get `""`
+  as a to-translate placeholder.
+- `ren <json> <old> <new>` — renames the key in every locale file, keeping its
+  position.
+- `del <json> <key>` — removes the key from every locale file.
+- `check [json]` — compares each locale's non-`_` key set against the target
+  (usually `en.json`) and reports missing/extra keys.
+
+Use it on either `assets/bundles/*.json` or `assets/docs/*.json`. Keys starting
+with `_` are comments — `add` only touches the file you name for those, and
+`check` ignores them. After key ops, translate the placeholders, run `check`,
+then push (CI regenerates `docs/i18n.md` and the READMEs).
 
 ## Key facts
 
