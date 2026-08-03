@@ -62,15 +62,17 @@ sync with one command instead of hand-editing each file. **Prefer the script;
 manual model edits are only a final fallback.**
 
 ```bash
-python3 scripts/keyops.py add   assets/bundles/en.json  newKey   "English value"
+python3 scripts/keyops.py add   assets/bundles/en.json  newKey   "English value"  --after settings
 python3 scripts/keyops.py ren   assets/bundles/en.json  oldKey   newKey
 python3 scripts/keyops.py del   assets/bundles/en.json  oldKey
 python3 scripts/keyops.py check assets/bundles/en.json
 ```
 
-- `add <json> <key> [value]` — adds the key to **every** locale file in the
-  same folder; the named file gets `value` (default `""`), the others get `""`
-  as a to-translate placeholder.
+- `add <json> <key> [value] [--after KEY | --before KEY]` — adds the key to
+  **every** locale file in the same folder; the named file gets `value`
+  (default `""`), the others get `""` as a to-translate placeholder. Use
+  `--after KEY` / `--before KEY` to place the new key next to an anchor key
+  (default: append at the end; a missing anchor appends with a warning).
 - `ren <json> <old> <new>` — renames the key in every locale file, keeping its
   position.
 - `del <json> <key>` — removes the key from every locale file.

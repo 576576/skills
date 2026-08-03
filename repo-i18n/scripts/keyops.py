@@ -5,7 +5,7 @@ Run this when adding, renaming, or removing a translation key so all language
 files stay consistent — manual model edits are only a final fallback.
 
 Usage:
-  python3 keyops.py add   <json> <key> [value]    # add key to every locale
+  python3 keyops.py add   <json> <key> [value] [--after KEY | --before KEY]
   python3 keyops.py ren   <json> <old> <new>      # rename key in every locale
   python3 keyops.py del   <json> <key>            # remove key from every locale
   python3 keyops.py check [json]                  # report key-set drift vs target
@@ -14,7 +14,9 @@ Usage:
 folder (e.g. zh.json, zh-Hant.json) are updated together.
 
 - `add`: the target file gets `value` (default ""); every other locale gets ""
-  as a to-translate placeholder.
+  as a to-translate placeholder. `--after KEY` / `--before KEY` place the new
+  key next to an anchor key (default: append at the end; a missing anchor
+  appends with a warning).
 - Keys starting with `_` are comments: `add` only touches the file you name,
   and `check` ignores them.
 - After key ops, translate the placeholders, run `check`, then push — CI
@@ -50,14 +52,60 @@ def is_comment(key):
     return key.startswith("_")
 
 
-def cmd_add(path, key, value):
+def parse_anchor(args):
+    """Split add args into positionals plus an optional --after/--before anchor."""
+    anchor_kind = None
+    anchor_key = None
+    rest = []
+    i = 0
+    while i < len(args):
+        a = args[i]
+        if a in ("--after", "--before"):
+            if anchor_kind:
+                raise SystemExit("use only one of --after / --before")
+            if i + 1 >= len(args):
+                raise SystemExit(f"{a} requires a key")
+            anchor_kind = a[2:]
+            anchor_key = args[i + 1]
+            i += 2
+        else:
+            rest.append(a)
+            i += 1
+    return rest, anchor_kind, anchor_key
+
+
+def insert_key(data, key, value, anchor_kind=None, anchor_key=None):
+    """Insert key into data keeping order: after/before an anchor, else append."""
+    if not anchor_kind:
+        data[key] = value
+        return
+    if anchor_key not in data:
+        print(f"warning: anchor {anchor_key!r} not found; appending")
+        data[key] = value
+        return
+    items = list(data.items())
+    pos = next(i for i, (k, _) in enumerate(items) if k == anchor_key)
+    if anchor_kind == "after":
+        pos += 1
+    data.clear()
+    inserted = False
+    for i, (k, v) in enumerate(items):
+        if i == pos and not inserted:
+            data[key] = value
+            inserted = True
+        data[k] = v
+    if not inserted:
+        data[key] = value
+
+
+def cmd_add(path, key, value, anchor_kind=None, anchor_key=None):
     if is_comment(key):
         # comments are per-language notes: only touch the named file
         data = load(path)
         if key in data:
             print(f"skip {path}: {key!r} already exists")
             return 1
-        data[key] = value if value else ""
+        insert_key(data, key, value if value else "", anchor_kind, anchor_key)
         save(path, data)
         print(f"added comment {key!r} to {path}")
         return 0
@@ -69,7 +117,8 @@ def cmd_add(path, key, value):
         if key in data:
             print(f"skip {p}: {key!r} already exists")
             continue
-        data[key] = value if os.path.abspath(p) == target else ""
+        val = value if os.path.abspath(p) == target else ""
+        insert_key(data, key, val, anchor_kind, anchor_key)
         save(p, data)
         print(f"added {key!r} -> {p}")
         changed = True
@@ -134,10 +183,12 @@ def main(argv):
 
     cmd = argv[0]
     if cmd == "add":
-        if len(argv) < 3:
-            print("usage: keyops.py add <json> <key> [value]")
+        rest, anchor_kind, anchor_key = parse_anchor(argv[1:])
+        if len(rest) < 2:
+            print("usage: keyops.py add <json> <key> [value] [--after KEY | --before KEY]")
             return 2
-        return cmd_add(argv[1], argv[2], argv[3] if len(argv) > 3 else "")
+        return cmd_add(rest[0], rest[1], rest[2] if len(rest) > 2 else "",
+                       anchor_kind, anchor_key)
     if cmd == "del":
         if len(argv) < 3:
             print("usage: keyops.py del <json> <key>")
