@@ -3,17 +3,22 @@
 
 Run from the repo root:
 
-    python3 scripts/clear_run.py
+    python3 scripts/clear_run.py            # clean run (default)
+    python3 scripts/clear_run.py --no-code  # non-code repo (no app UI)
 
 - If `assets/docs/*.json` exists: renders the root `README.md` (root_lang)
   and `docs/{code}/README.md` for every locale from
   `assets/templates/README.md`. Missing folders/files are skipped.
 - **Bundles are ignored**: no coverage table, no `docs/i18n.md`.
+- `--no-code` explicitly declares a **non-code** repo (no app UI): even if
+  `assets/bundles/` exists it is ignored, and `docs/i18n.md` is never written
+  (the coverage table needs bundles).
 - Otherwise: creates a minimal **Chinese** `README.md` only when it is
   missing.
 - `.github/` and CI are never read or written.
 """
 
+import argparse
 import glob
 import json
 import os
@@ -225,7 +230,18 @@ def create_simple_readme():
     return True
 
 
-def main():
+def main(argv=None):
+    parser = argparse.ArgumentParser(
+        description="One-shot doc refresh (clear run): no CI, no .github writes.")
+    parser.add_argument(
+        "--no-code", action="store_true",
+        help="Declare a non-code repo (no app UI): ignore assets/bundles/ even "
+             "if present and never write docs/i18n.md (it needs bundles).")
+    args = parser.parse_args(argv)
+
+    if args.no_code:
+        print("Non-code mode: assets/bundles/ ignored, docs/i18n.md skipped.")
+
     docs = docs_sorted()
     if not docs:
         return 0 if create_simple_readme() else 0

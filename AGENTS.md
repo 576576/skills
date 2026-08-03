@@ -1,7 +1,8 @@
 # AGENTS 指南：维护本仓库的多语言文档
 
-本仓库用 [`repo-i18n`](repo-i18n/SKILL.md) skill 的 **clear-run 模式** 维护多语言 README：
-**无 CI、无 bundles、无 `docs/i18n.md`** —— 文档完全由本地脚本一次生成并提交。
+本仓库是**非代码仓库**（无应用 UI），用 [`repo-i18n`](repo-i18n/SKILL.md) skill 的
+**clear-run 模式**维护多语言 README：**无 CI、无 bundles、无 `docs/i18n.md`** ——
+文档完全由本地脚本一次生成并提交。
 
 ## 文件布局
 
@@ -38,10 +39,10 @@ assets/
 2. 同步编辑 `assets/docs/zh.json`
 3. `assets/docs/zh-Hant.json` 仅当标题需要繁体时才改，正文靠回退，不要补全所有键
 4. 如模板占位符有变，编辑 `assets/templates/README.md`
-5. 从仓库根重新渲染：
+5. 从仓库根重新渲染（本仓库为非代码仓库，显式加 `--no-code`）：
 
    ```bash
-   python repo-i18n/scripts/clear_run.py
+   python repo-i18n/scripts/clear_run.py --no-code
    ```
 
    会重写 `README.md` 与 `docs/*/README.md`（忽略 bundles、不写 `docs/i18n.md`）。

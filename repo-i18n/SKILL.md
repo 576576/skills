@@ -92,16 +92,24 @@ then push (CI regenerates `docs/i18n.md` and the READMEs).
 
 ## Clear run — `scripts/clear_run.py`
 
-A one-shot document refresh without touching CI or `.github/`:
+A one-shot document refresh without touching CI or `.github/`. You can pick
+**clean run** (this script, local one-shot) or the **full CI run**
+(`render_i18n.py` + the `i18n.yml` workflow) for a repo — see
+[references/ci-pipeline.md](references/ci-pipeline.md). This script always
+runs clean:
 
 ```bash
-python3 scripts/clear_run.py
+python3 scripts/clear_run.py            # clean run (default)
+python3 scripts/clear_run.py --no-code  # non-code repo (no app UI)
 ```
 
 - If `assets/docs/*.json` exists, renders `README.md` (root_lang) and
   `docs/{code}/README.md` for every locale from `assets/templates/README.md`;
   missing folders/files are **skipped**.
 - **Bundles are ignored** — no coverage table, no `docs/i18n.md`.
+- `--no-code` explicitly declares a **non-code** repo (no app UI): even if
+  `assets/bundles/` exists it is ignored, and `docs/i18n.md` is never written
+  (the coverage table needs bundles). Use it for docs/content-only repos.
 - Otherwise, creates a minimal **Chinese** `README.md` only when it is
   missing.
 
