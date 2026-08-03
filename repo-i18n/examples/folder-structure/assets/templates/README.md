@@ -1,7 +1,3 @@
-<p align="center">
-  <img src="{{icon_prefix}}assets/images/icon.png" width="64" alt="{{title}}">
-</p>
-
 <h1 align="center">{{title}}</h1>
 
 <p align="center">
@@ -11,7 +7,6 @@
 <p align="center">
   <img src="https://img.shields.io/badge/platform-{{platforms}}-blue" alt="Platform">
   <img src="https://img.shields.io/badge/license-{{license}}-green" alt="License">
-  <img alt="version" src="https://img.shields.io/badge/version-{{version}}-informational" />
 </p>
 
 ---

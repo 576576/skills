@@ -13,7 +13,7 @@ Outputs (CI-generated):
     README.md                    root view of root_lang
     docs/{code}/README.md        docs view for every locale (incl. en)
 
-Driven by env: I18N_DO, DOCS_DO, BUNDLES_HASH, DOCS_HASH, TEMPLATES_HASH, VERSION
+Driven by env: I18N_DO, DOCS_DO, BUNDLES_HASH, DOCS_HASH, TEMPLATES_HASH
 """
 
 import glob
@@ -225,7 +225,6 @@ def render_readme(code, out_path, root_view, bundles, counts, docs_by_code, fall
 
     tpl = tpl.replace("{{icon_prefix}}", icon_prefix)
     tpl = tpl.replace("{{languages}}", render_languages(doc["langCode"], doc_prefix, bundles, counts))
-    tpl = tpl.replace("{{version}}", os.environ.get("VERSION", "0.1.0"))
 
     # whole-value tokens: platforms (URL-encoded), license (plain text)
     if isinstance(doc.get("platforms"), list):
@@ -242,7 +241,17 @@ def render_readme(code, out_path, root_view, bundles, counts, docs_by_code, fall
             value = value.replace("](docs/", "](../docs/")
         tpl = tpl.replace("{{" + token + "}}", str(value))
 
-    write_text(out_path, tpl)
+    # icon is attached by the script only when assets/images/icon.png exists
+    icon_html = ""
+    if os.path.exists("assets/images/icon.png"):
+        title = doc.get("title", "")
+        icon_html = (
+            '<p align="center">\n'
+            f'  <img src="{icon_prefix}assets/images/icon.png" width="64" alt="{title}">\n'
+            '</p>\n\n'
+        )
+
+    write_text(out_path, icon_html + tpl)
 
 
 def render_i18n(hashes):

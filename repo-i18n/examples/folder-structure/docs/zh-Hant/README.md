@@ -1,7 +1,3 @@
-<p align="center">
-  <img src="../../assets/images/icon.png" width="64" alt="应用名">
-</p>
-
 <h1 align="center">应用名</h1>
 
 <p align="center">
@@ -11,7 +7,6 @@
 <p align="center">
   <img src="https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20Android-blue" alt="Platform">
   <img src="https://img.shields.io/badge/license-开源协议名-green" alt="License">
-  <img alt="version" src="https://img.shields.io/badge/version-0.1.0-informational" />
 </p>
 
 ---

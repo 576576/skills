@@ -4,11 +4,15 @@
 
 `assets/templates/README.md` uses `{{token}}` placeholders:
 
-- **Special**: `{{icon_prefix}}`, `{{languages}}`, `{{title}}`, `{{version}}`,
+- **Special**: `{{icon_prefix}}`, `{{languages}}`, `{{title}}`,
   `{{platforms}}` (badge, URL-encoded), `{{license}}` (badge + section text).
 - **Dot paths**: `{{headings.block1}}`, `{{descriptions.desc1}}`,
   `{{features.title.0}}`, `{{features.feat1.1}}`, `{{archTree.dir1.0}}`, ... —
   a dot walks a nested dict, a trailing index addresses a list element.
+
+The leading icon is **not** part of the template — the render script prepends
+`<p align="center"><img src="...assets/images/icon.png" width="64" ...></p>`
+only when `assets/images/icon.png` exists.
 
 `assets/templates/i18n.md` uses: `{{title}}`, `{{date}}`, `{{rows}}`,
 `{{bundles_hash}}`, `{{docs_hash}}`, `{{templates_hash}}`.
@@ -16,10 +20,6 @@
 ## Example README (template excerpt)
 
 ```markdown
-<p align="center">
-  <img src="{{icon_prefix}}assets/images/icon.png" width="64" alt="{{title}}">
-</p>
-
 <h1 align="center">{{title}}</h1>
 
 <p align="center">
@@ -29,7 +29,6 @@
 <p align="center">
   <img src="https://img.shields.io/badge/platform-{{platforms}}-blue" alt="Platform">
   <img src="https://img.shields.io/badge/license-{{license}}-green" alt="License">
-  <img alt="version" src="https://img.shields.io/badge/version-{{version}}-informational" />
 </p>
 
 ---
@@ -63,10 +62,6 @@
 ## Example generated README (root view, `root_lang: en`)
 
 ```markdown
-<p align="center">
-  <img src="assets/images/icon.png" width="64" alt="AppName">
-</p>
-
 <h1 align="center">AppName</h1>
 
 <p align="center">
