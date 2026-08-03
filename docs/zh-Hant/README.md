@@ -25,7 +25,7 @@
 
 ## repo-i18n
 
-**repo-i18n** —— 管理仓库多语言文档：翻译存于 JSON，模板渲染，`clear_run.py` 一键刷新。
+**repo-i18n** —— 管理仓库多语言文档：翻译存于 JSON，模板渲染，`render_i18n.py --once` 一键刷新。
 
 ## 許可證
 

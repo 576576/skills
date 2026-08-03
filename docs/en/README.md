@@ -25,7 +25,7 @@ A collection of reusable agent skills created by 576576.
 
 ## repo-i18n
 
-**repo-i18n** — Multi-language repo docs: translations in JSON, rendered from templates, one-shot refresh via `clear_run.py`.
+**repo-i18n** — Multi-language repo docs: translations in JSON, rendered from templates, one-shot refresh via `render_i18n.py --once`.
 
 ## License
 

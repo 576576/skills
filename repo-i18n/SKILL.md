@@ -25,7 +25,7 @@ repo-i18n/
 ├── SKILL.md                    # this entry point
 ├── scripts/
 │   ├── keyops.py               # add/ren/del/check keys across locales
-│   └── clear_run.py            # one-shot doc refresh (no CI, no .github)
+│   └── render_i18n.py          # render READMEs (+ i18n.md); --once clean run
 ├── references/
 │   ├── folder-layout.md        # input/output folders + preset structure + app runtime
 │   ├── i18n-config.md          # assets/.i18n_config/i18n.yml (root_lang, fallback)
@@ -90,28 +90,29 @@ with `_` are comments — `add` only touches the file you name for those, and
 `check` ignores them. After key ops, translate the placeholders, run `check`,
 then push (CI regenerates `docs/i18n.md` and the READMEs).
 
-## Clear run — `scripts/clear_run.py`
+## Render — `scripts/render_i18n.py`
 
-A one-shot document refresh without touching CI or `.github/`. You can pick
-**clean run** (this script, local one-shot) or the **full CI run**
-(`render_i18n.py` + the `i18n.yml` workflow) for a repo — see
-[references/ci-pipeline.md](references/ci-pipeline.md). This script always
-runs clean:
+One script, two modes. The **default (CI) mode** is driven by the `I18N_DO` /
+`DOCS_DO` / `*_HASH` env vars (hash-check → i18n job → commit job pipeline).
+The **one-shot clean run** (former `clear_run.py`) never touches CI or
+`.github/`:
 
 ```bash
-python3 scripts/clear_run.py            # clean run (default)
-python3 scripts/clear_run.py --no-code  # non-code repo (no app UI)
+python3 scripts/render_i18n.py                  # CI mode (env-driven)
+python3 scripts/render_i18n.py --once           # one-shot clean run
+python3 scripts/render_i18n.py --once --no-code # non-code repo (no app UI)
 ```
 
-- If `assets/docs/*.json` exists, renders `README.md` (root_lang) and
-  `docs/{code}/README.md` for every locale from `assets/templates/README.md`;
-  missing folders/files are **skipped**.
-- **Bundles are ignored** — no coverage table, no `docs/i18n.md`.
+- **CI mode** renders `docs/i18n.md` (coverage table, needs bundles) when
+  `I18N_DO=true`, and the READMEs when `DOCS_DO=true`.
+- `--once` always renders `README.md` (root_lang) and `docs/{code}/README.md`
+  for every locale from `assets/templates/README.md`; missing folders/files
+  are **skipped**; bundles are ignored and `docs/i18n.md` is never written.
+  When no `assets/docs/*.json` exist, a minimal **Chinese** `README.md` is
+  created.
 - `--no-code` explicitly declares a **non-code** repo (no app UI): even if
   `assets/bundles/` exists it is ignored, and `docs/i18n.md` is never written
   (the coverage table needs bundles). Use it for docs/content-only repos.
-- Otherwise, creates a minimal **Chinese** `README.md` only when it is
-  missing.
 
 ## Templates — code vs no-code repos
 
@@ -129,8 +130,9 @@ matches your repo:
 - **Non-code repos** only need `headings.block1` + `headings.license` and
   `descriptions.desc1` + `descriptions.desc2`; `platforms`, `features`, and
   `archTree` can be omitted from the docs JSON entirely. **`assets/bundles/`
-  is not created** (no app UI) — both `clear_run` and the render script
-  ignore it and skip `docs/i18n.md` (coverage needs bundles).
+  is not created** (no app UI) — `render_i18n.py` ignores it and skips
+  `docs/i18n.md` (coverage needs bundles); non-code repos run with
+  `--once --no-code`.
 
 When you copy the example, keep **only one** template as `README.md` in your
 target repo: code repos delete `README.nocode.md`; non-code repos delete

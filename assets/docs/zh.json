@@ -29,6 +29,6 @@
 
   "_comment_block3": "── 技能使用说明（每个技能一个 block，按字典序）──",
   "skills": {
-    "repo-i18n": "**repo-i18n** —— 管理仓库多语言文档：翻译存于 JSON，模板渲染，`clear_run.py` 一键刷新。"
+    "repo-i18n": "**repo-i18n** —— 管理仓库多语言文档：翻译存于 JSON，模板渲染，`render_i18n.py --once` 一键刷新。"
   }
 }
