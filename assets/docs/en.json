@@ -29,6 +29,6 @@
 
   "_comment_block3": "── Skill usage (one block per skill, sorted) ──",
   "skills": {
-    "repo-i18n": "**repo-i18n** — Multi-language repo docs: translations in JSON, rendered from templates, one-shot refresh via `render_i18n.py --once`."
+    "repo-i18n": "**repo-i18n** — Manage repository multi-language docs: translations live in `assets/docs/*.json`, rendered from `assets/templates/README.md`. `repo-i18n/scripts/render_i18n.py` runs directly from the repo root and rewrites `README.md` + `docs/*/README.md` in place: `--once` is a one-shot clean run (no CI, ignores bundles, no `docs/i18n.md`); `--no-code` is the non-code mode (drops `platforms` before rendering, no platform badge)."
   }
 }

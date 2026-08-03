@@ -24,7 +24,7 @@
 
 ## repo-i18n
 
-**repo-i18n** —— 管理仓库多语言文档：翻译存于 JSON，模板渲染，`render_i18n.py --once` 一键刷新。
+**repo-i18n** —— 管理仓库多语言文档：翻译存于 `assets/docs/*.json`，由 `assets/templates/README.md` 渲染。`repo-i18n/scripts/render_i18n.py` 可直接在仓库根执行，就地重写 `README.md` 与 `docs/*/README.md`：`--once` 为一次性干净运行（不依赖 CI，忽略 bundles、不写 `docs/i18n.md`）；`--no-code` 为非代码仓库模式（渲染前移除 `platforms`，不生成平台徽章）。
 
 ## 许可证
 
