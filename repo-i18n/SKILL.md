@@ -105,6 +105,27 @@ python3 scripts/clear_run.py
 - Otherwise, creates a minimal **Chinese** `README.md` only when it is
   missing.
 
+## Templates — code vs no-code repos
+
+`assets/templates/` ships **two** README templates; keep only the one that
+matches your repo:
+
+| Template | Use for | Blocks |
+|----------|---------|--------|
+| `README.md` | **Code repos** | block1 (description) + block2 (feature table) + block3 (arch tree) + license, plus platform & license badges |
+| `README.nocode.md` | **Non-code repos** | block1 only, with **two** description paragraphs, + license — no block3 arch tree, no platform pill |
+
+- **Code repos** use the existing `README.md` template: the docs JSON needs
+  `headings.block1/2/3`, `descriptions`, `features` (table), `archTree`
+  (tree), and `platforms` (badge).
+- **Non-code repos** only need `headings.block1` + `headings.license` and
+  `descriptions.desc1` + `descriptions.desc2`; `platforms`, `features`, and
+  `archTree` can be omitted from the docs JSON entirely.
+
+When you copy the example, keep **only one** template as `README.md` in your
+target repo: code repos delete `README.nocode.md`; non-code repos delete
+`README.md` and rename `README.nocode.md` to `README.md`.
+
 ## Key facts
 
 - Root README language is configurable via `assets/.i18n_config/i18n.yml`

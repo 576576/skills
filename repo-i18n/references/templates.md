@@ -1,5 +1,10 @@
 # Templates & Example README
 
+`assets/templates/` ships two README templates — `README.md` (code repos:
+block1/2/3 + platform & license badges) and `README.nocode.md` (non-code
+repos: block1 only with two description paragraphs + license, no arch tree /
+platform pill). Keep only the one matching your repo as `README.md`.
+
 ## Placeholders
 
 `assets/templates/README.md` uses `{{token}}` placeholders:
