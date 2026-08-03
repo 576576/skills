@@ -26,7 +26,7 @@
   },
 
   "_comment_content": "── Content Blocks ──",
-  "building": "See [BUILD.md](docs/BUILD.md).",
+  "building": "Shows how to build.",
   "arch_tree": {
     "dir1": "desc1"
   },

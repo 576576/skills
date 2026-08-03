@@ -182,8 +182,38 @@ def render_languages(cur_code, doc_prefix, bundles, counts):
     return " &nbsp;|&nbsp; ".join(items)
 
 
-def render_readme(doc_path, out_path, root_view, bundles, counts):
-    doc = load_json(doc_path)
+def deep_merge(base, override):
+    """Recursively merge override into base; override wins."""
+    out = dict(base)
+    for k, v in override.items():
+        if k in out and isinstance(out[k], dict) and isinstance(v, dict):
+            out[k] = deep_merge(out[k], v)
+        else:
+            out[k] = v
+    return out
+
+
+def load_docs_by_code():
+    docs = {}
+    for path in glob.glob("assets/docs/*.json"):
+        d = load_json(path)
+        docs[d["langCode"]] = d
+    return docs
+
+
+def merged_doc(code, docs_by_code, fallback_map, bundles_by_code):
+    """Locale doc with missing keys filled from its fallback chain."""
+    merged = {}
+    chain = fallback_chain(code, fallback_map, bundles_by_code)
+    for c in list(reversed(chain)) + [code]:
+        d = docs_by_code.get(c)
+        if d:
+            merged = deep_merge(merged, d)
+    return merged
+
+
+def render_readme(code, out_path, root_view, bundles, counts, docs_by_code, fallback_map, bundles_by_code):
+    doc = merged_doc(code, docs_by_code, fallback_map, bundles_by_code)
     tpl = read_text("assets/templates/README.md")
 
     doc_prefix = "docs/" if root_view else "../"
@@ -269,6 +299,8 @@ def main():
 
     bundles = bundles_sorted()
     counts = lang_counts(bundles)
+    bundles_by_code = {b["langCode"]: b for b in bundles}
+    _, fallback_map = parse_i18n_config()
     rl = root_lang()
 
     if i18n_do:
@@ -276,12 +308,14 @@ def main():
         print("Rendered docs/i18n.md")
 
     if docs_do:
+        docs_by_code = load_docs_by_code()
         # docs view for every locale (en included)
-        for path in sorted(glob.glob("assets/docs/*.json")):
-            code = load_json(path)["langCode"]
-            render_readme(path, f"docs/{code}/README.md", False, bundles, counts)
+        for code in sorted(docs_by_code):
+            render_readme(code, f"docs/{code}/README.md", False, bundles, counts,
+                          docs_by_code, fallback_map, bundles_by_code)
         # root view for root_lang
-        render_readme(f"assets/docs/{rl}.json", "README.md", True, bundles, counts)
+        render_readme(rl, "README.md", True, bundles, counts,
+                      docs_by_code, fallback_map, bundles_by_code)
         print("Rendered README.md + docs/*/README.md")
 
 

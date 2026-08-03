@@ -18,23 +18,5 @@
     "i18n": "國際化",
     "acknowledgments": "鳴謝",
     "license": "許可證"
-  },
-
-  "_comment_features": "── 功能特性 ──",
-  "feat_table": {
-    "feature1": "描述1"
-  },
-
-  "_comment_content": "── 內容區塊 ──",
-  "building": "構建說明請參閱 [BUILD.md](docs/BUILD.md)。",
-  "arch_tree": {
-    "dir1": "描述1"
-  },
-  "stack_tree": {
-    "row1": "描述1"
-  },
-  "i18n": "語言狀態請參閱 [docs/i18n.md](docs/i18n.md)。",
-  "ack_tree": {
-    "key1": "描述1"
   }
 }

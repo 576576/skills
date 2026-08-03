@@ -28,7 +28,7 @@
 
 ## 構建
 
-構建說明請參閱 [BUILD.md](../docs/BUILD.md)。
+构建说明请参阅 [BUILD.md](../docs/BUILD.md)。
 
 ---
 
@@ -52,7 +52,7 @@ YourApp/
 
 ## 國際化
 
-語言狀態請參閱 [docs/i18n.md](../docs/i18n.md)。
+语言状态请参阅 [docs/i18n.md](../docs/i18n.md)。
 
 ---
 
