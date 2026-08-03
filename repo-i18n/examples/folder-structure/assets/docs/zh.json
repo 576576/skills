@@ -4,36 +4,34 @@
   "langCode": "zh",
   "langRegion": "简体",
   "langRegionCode": ["Hans", "CN", "SG"],
+  "platforms": ["Windows", "Linux", "Android"],
   "license": "开源协议名",
   "title": "应用名",
-  "tagline_block": "应用的一句话简介",
 
   "_comment_headings": "── 章节标题 ──",
   "headings": {
-    "features": "特性",
-    "build": "构建",
-    "architecture": "架构",
-    "stack": "技术栈",
-    "i18n": "国际化",
-    "acknowledgments": "致谢",
+    "block1": "块1标题",
+    "block2": "块2标题",
+    "block3": "块3标题",
     "license": "许可证"
   },
 
-  "_comment_features": "── 特性 ──",
-  "feat_table": {
-    "feature1": "描述1"
+  "_comment_block1": "── 描述 ──",
+  "descriptions": {
+    "desc1": "描述1"
   },
 
-  "_comment_content": "── 内容块 ──",
-  "building": "展示如何构建。",
-  "arch_tree": {
-    "dir1": "描述1"
+  "_comment_block2": "── 特性 ──",
+  "features": {
+    "title": ["列1", "列2"],
+    "feat1": ["特性1", "描述1"],
+    "feat2": ["特性2", "描述2"]
   },
-  "stack_tree": {
-    "row1": "描述1"
-  },
-  "i18n": "语言状态请参阅 [docs/i18n.md](docs/i18n.md)。",
-  "ack_tree": {
-    "key1": "描述1"
+
+  "_comment_block3": "── 架构 ──",
+  "archTree": {
+    "title": "文件夹标题",
+    "dir1": ["目录1", "描述1"],
+    "dir2": ["目录2", "描述2"]
   }
 }

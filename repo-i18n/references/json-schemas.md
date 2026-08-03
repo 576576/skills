@@ -32,9 +32,9 @@ Rules:
 ## Docs (`assets/docs/{code}.json`) — README content
 
 Top-level keys: `lang`, `langCode`, `langRegion`, `langRegionCode`, `platforms`,
-`license`, `title`, `tagline_block`, `feat_table`, `headings`, `building`,
-`arch_tree`, `stack_tree`, `i18n`, `ack_tree`. Each maps 1:1 to a
-`{{placeholder}}` in the README template.
+`license`, `title`, `headings`, `descriptions`, `features`, `archTree`. Nested
+fields map to dot-path `{{placeholder}}`s (e.g. `headings.block1`,
+`features.title.0`, `archTree.dir1.1`).
 
 ```json
 {
@@ -43,21 +43,16 @@ Top-level keys: `lang`, `langCode`, `langRegion`, `langRegionCode`, `platforms`,
   "langCode": "en",
   "langRegion": "United States",
   "langRegionCode": ["US", "GB"],
-  "platforms": ["Android", "Windows", "Linux"],  // platform badge list ({{platforms}})
-  "license": "GPL v3",                            // license badge ({{license}})
-  "title": "YourApp",
-  "tagline_block": "A one-line description of your app — ...",
+  "platforms": ["Windows", "Linux", "Android"],  // platform badge list ({{platforms}})
+  "license": "LicenseName",                       // license badge + section ({{license}})
+  "title": "AppName",
 
-  "feat_table": { "platform": "...", "encryption": "...", "i18n": "...", "theme": "..." },
-  "headings": { "features": "Features", "build": "Build", "architecture": "Architecture",
-                "stack": "Tech Stack", "i18n": "I18n", "acknowledgments": "Acknowledgments",
-                "license": "License" },
-  "building": "See [BUILD.md](docs/BUILD.md) ...",
-  "arch_tree": { "src": "...", "assets": "...", "ci": "..." },
-  "stack_tree": { "col_layer": "...", "col_tech": "...", "l_ui": "...", "l_state": "...",
-                  "l_backend": "...", "l_i18n": "...", "l_ci": "...", "ui": "...",
-                  "state": "...", "backend": "...", "i18n": "...", "ci": "..." },
-  "i18n": "See [docs/i18n.md](docs/i18n.md) ...",
-  "ack_tree": { "col_project": "...", "col_desc": "...", "framework": "...", "tool": "..." }
+  "headings": { "block1": "Block1Heading", "block2": "Block2Heading",
+                "block3": "Block3Heading", "license": "License" },
+  "descriptions": { "desc1": "Description1" },
+  "features": { "title": ["title1", "title2"],
+                "feat1": ["feat1", "desc1"], "feat2": ["feat2", "desc2"] },
+  "archTree": { "title": "folderTitle", "dir1": ["dir1", "desc1"],
+                "dir2": ["dir2", "desc2"] }
 }
 ```

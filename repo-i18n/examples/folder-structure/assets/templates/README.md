@@ -14,56 +14,29 @@
   <img alt="version" src="https://img.shields.io/badge/version-{{version}}-informational" />
 </p>
 
-<em>{{tagline_block}}</em>
+---
+
+## {{headings.block1}}
+
+{{descriptions.desc1}}
+
+## {{headings.block2}}
+
+ {{features.title.0}} | {{features.title.1}}
+ --- | ---
+ {{features.feat1.0}} | {{features.feat1.1}}
+ {{features.feat2.0}} | {{features.feat2.1}}
 
 ---
 
-## {{heading_features}}
+## {{headings.block3}}
 
-| {{heading_features}} |
-|---|
-| {{feat_feature1}} |
-
----
-
-## {{heading_build}}
-
-{{building}}
-
----
-
-## {{heading_architecture}}
-
-```
-{{title}}/
-├── dir1/               {{arch_dir1}}
-└── (platform)/
+```text
+{{archTree.title}}/
+├── {{archTree.dir1.0}}/               {{archTree.dir1.1}}
+└── {{archTree.dir2.0}}/               {{archTree.dir2.1}}
 ```
 
----
+## {{headings.license}}
 
-## {{heading_stack}}
-
-| {{heading_stack}} |
-|---|
-| {{stack_row1}} |
-
----
-
-## {{heading_i18n}}
-
-{{i18n}}
-
----
-
-## {{heading_acknowledgments}}
-
-| {{heading_acknowledgments}} |
-|---|
-| {{ack_key1}} |
-
----
-
-## {{heading_license}}
-
-GPL3 © {{title}} Contributors
+{{license}} © {{title}} Contributors

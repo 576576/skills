@@ -4,16 +4,12 @@
   "langCode": "zh-Hant",
   "langRegion": "繁體",
   "langRegionCode": ["Hant", "TW", "HK", "MO"],
-  "tagline_block": "應用的一句話簡介",
 
   "_comment_headings": "── 章節標題 ──",
   "headings": {
-    "features": "功能特性",
-    "build": "構建",
-    "architecture": "架構",
-    "stack": "技術棧",
-    "i18n": "國際化",
-    "acknowledgments": "鳴謝",
+    "block1": "區塊1標題",
+    "block2": "區塊2標題",
+    "block3": "區塊3標題",
     "license": "許可證"
   }
 }

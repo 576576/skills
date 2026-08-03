@@ -2,10 +2,13 @@
 
 ## Placeholders
 
-`assets/templates/README.md` uses `{{token}}` placeholders, e.g.:
-`{{icon_prefix}}`, `{{languages}}`, `{{title}}`, `{{version}}`, `{{platforms}}`,
-`{{license}}`, `{{tagline_block}}`, `{{heading_*}}`, `{{feat_*}}`, `{{building}}`,
-`{{arch_*}}`, `{{stack_*}}`, `{{i18n}}`, `{{ack_*}}`.
+`assets/templates/README.md` uses `{{token}}` placeholders:
+
+- **Special**: `{{icon_prefix}}`, `{{languages}}`, `{{title}}`, `{{version}}`,
+  `{{platforms}}` (badge, URL-encoded), `{{license}}` (badge + section text).
+- **Dot paths**: `{{headings.block1}}`, `{{descriptions.desc1}}`,
+  `{{features.title.0}}`, `{{features.feat1.1}}`, `{{archTree.dir1.0}}`, ... —
+  a dot walks a nested dict, a trailing index addresses a list element.
 
 `assets/templates/i18n.md` uses: `{{title}}`, `{{date}}`, `{{rows}}`,
 `{{bundles_hash}}`, `{{docs_hash}}`, `{{templates_hash}}`.
@@ -25,32 +28,49 @@
 
 <p align="center">
   <img src="https://img.shields.io/badge/platform-{{platforms}}-blue" alt="Platform">
+  <img src="https://img.shields.io/badge/license-{{license}}-green" alt="License">
   <img alt="version" src="https://img.shields.io/badge/version-{{version}}-informational" />
 </p>
 
-<em>{{tagline_block}}</em>
+---
+
+## {{headings.block1}}
+
+{{descriptions.desc1}}
+
+## {{headings.block2}}
+
+ {{features.title.0}} | {{features.title.1}}
+ --- | ---
+ {{features.feat1.0}} | {{features.feat1.1}}
+ {{features.feat2.0}} | {{features.feat2.1}}
 
 ---
 
-## {{heading_features}}
+## {{headings.block3}}
 
-| {{heading_features}} |
-|---|
-| {{feat_feature1}} |
-...
+```text
+{{archTree.title}}/
+├── {{archTree.dir1.0}}/               {{archTree.dir1.1}}
+└── {{archTree.dir2.0}}/               {{archTree.dir2.1}}
+```
+
+## {{headings.license}}
+
+{{license}} © {{title}} Contributors
 ```
 
 ## Example generated README (root view, `root_lang: en`)
 
 ```markdown
 <p align="center">
-  <img src="assets/images/icon.png" width="64" alt="YourApp">
+  <img src="assets/images/icon.png" width="64" alt="AppName">
 </p>
 
-<h1 align="center">YourApp</h1>
+<h1 align="center">AppName</h1>
 
 <p align="center">
-<a href="docs/zh/README.md">中文 (简体)</a> &nbsp;|&nbsp; <a href="docs/ja/README.md">日本語</a> &nbsp;|&nbsp; English
+<a href="docs/zh/README.md">中文 (简体)</a> &nbsp;|&nbsp; <a href="docs/zh-Hant/README.md">中文 (繁體)</a> &nbsp;|&nbsp; English
 </p>
 ...
 ```

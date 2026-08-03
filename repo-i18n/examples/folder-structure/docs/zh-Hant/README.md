@@ -1,69 +1,42 @@
 <p align="center">
-  <img src="../../assets/images/icon.png" width="64" alt="YourApp">
+  <img src="../../assets/images/icon.png" width="64" alt="应用名">
 </p>
 
-<h1 align="center">YourApp</h1>
+<h1 align="center">应用名</h1>
 
 <p align="center">
-中文 (繁體) &nbsp;|&nbsp; <a href="../zh/README.md">中文 (简体)</a> &nbsp;|&nbsp; <a href="../en/README.md">English</a>
+<a href="../zh/README.md">中文 (简体)</a> &nbsp;|&nbsp; 中文 (繁體) &nbsp;|&nbsp; <a href="../en/README.md">English</a>
 </p>
 
 <p align="center">
-  <img src="https://img.shields.io/badge/platform-Android%20%7C%20Windows%20%7C%20Linux-blue" alt="Platform">
-  <img src="https://img.shields.io/badge/license-GPL%20v3-green" alt="License">
-  <img alt="version" src="https://img.shields.io/badge/version-1.2.3-informational" />
+  <img src="https://img.shields.io/badge/platform-Windows%20%7C%20Linux%20%7C%20Android-blue" alt="Platform">
+  <img src="https://img.shields.io/badge/license-开源协议名-green" alt="License">
+  <img alt="version" src="https://img.shields.io/badge/version-0.1.0-informational" />
 </p>
 
-<em>應用的一句話簡介</em>
+---
+
+## 區塊1標題
+
+描述1
+
+## 區塊2標題
+
+ 列1 | 列2
+ --- | ---
+ 特性1 | 描述1
+ 特性2 | 描述2
 
 ---
 
-## 功能特性
+## 區塊3標題
 
-| 功能特性 |
-|---|
-| 描述1 |
-
----
-
-## 構建
-
-构建说明请参阅 [BUILD.md](../docs/BUILD.md)。
-
----
-
-## 架構
-
+```text
+文件夹标题/
+├── 目录1/               描述1
+└── 目录2/               描述2
 ```
-YourApp/
-├── dir1/               描述1
-└── (platform)/
-```
-
----
-
-## 技術棧
-
-| 技術棧 |
-|---|
-| 描述1 |
-
----
-
-## 國際化
-
-语言状态请参阅 [docs/i18n.md](../docs/i18n.md)。
-
----
-
-## 鳴謝
-
-| 鳴謝 |
-|---|
-| 描述1 |
-
----
 
 ## 許可證
 
-GPL3 © YourApp Contributors
+开源协议名 © 应用名 Contributors

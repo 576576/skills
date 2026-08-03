@@ -4,37 +4,34 @@
   "langCode": "en",
   "langRegion": "United States",
   "langRegionCode": ["US", "GB"],
-  "platforms": ["Android", "Windows", "Linux"],
+  "platforms": ["Windows", "Linux", "Android"],
   "license": "LicenseName",
   "title": "AppName",
-  "tagline_block": "A description of the app",
 
   "_comment_headings": "── Section Headings ──",
   "headings": {
-    "features": "Features",
-    "build": "Build",
-    "architecture": "Architecture",
-    "stack": "Tech Stack",
-    "i18n": "I18n",
-    "acknowledgments": "Acknowledgments",
+    "block1": "Block1Heading",
+    "block2": "Block2Heading",
+    "block3": "Block3Heading",
     "license": "License"
   },
 
-  "_comment_features": "── Features ──",
-  "feat_table": {
-    "feature1": "desc1"
+  "_comment_block1": "── Descriptions ──",
+  "descriptions": {
+    "desc1": "Description1"
   },
 
-  "_comment_content": "── Content Blocks ──",
-  "building": "Shows how to build.",
-  "arch_tree": {
-    "dir1": "desc1"
+  "_comment_block2": "── Features ──",
+  "features": {
+    "title": ["title1","title2"],
+    "feat1": ["feat1","desc1"],
+    "feat2": ["feat2","desc2"]
   },
-  "stack_tree": {
-    "row1": "desc1"
-  },
-  "i18n": "See [docs/i18n.md](docs/i18n.md).",
-  "ack_tree": {
-    "key1": "desc1"
+
+  "_comment_block3": "── Architecture ──",
+  "archTree": {
+    "title": "folderTitle",
+    "dir1": ["dir1","desc1"],
+    "dir2": ["dir2","desc2"]
   }
 }
