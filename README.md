@@ -5,7 +5,7 @@
 <h1 align="center">Skills</h1>
 
 <p align="center">
-<a href="docs/zh/README.md">中文 (简体)</a> &nbsp;|&nbsp; <a href="docs/zh-Hant/README.md">中文 (繁體)</a> &nbsp;|&nbsp; English
+中文 (简体) &nbsp;|&nbsp; <a href="docs/zh-Hant/README.md">中文 (繁體)</a> &nbsp;|&nbsp; <a href="docs/en/README.md">English</a>
 </p>
 
 <p align="center">
@@ -15,23 +15,23 @@
 
 ---
 
-## Intro
+## 简介
 
-A collection of reusable agent skills, starting with repo-i18n for repository internationalization.
+可复用的智能体技能集合，以 repo-i18n（仓库国际化）为起点。
 
-## Features
+## 特性
 
- Skill | Purpose
+ 技能 | 用途
  --- | ---
- repo-i18n | Multi-language docs via JSON bundles
- Scripts | Key ops, render, one-shot clear-run
+ repo-i18n | 通过 JSON 语言包管理多语言文档
+ 脚本 | 键操作、渲染、一键 clear-run 刷新
 
 ---
 
 ## repo-i18n
 
-**repo-i18n** — Manage repository multi-language documentation. Keep translations in `assets/docs/*.json`, render READMEs from `assets/templates/README.md`, and regenerate with `python repo-i18n/scripts/clear_run.py`. Guides live in `repo-i18n/references/`.
+**repo-i18n** —— 管理仓库多语言文档。翻译内容保存在 `assets/docs/*.json`，由 `assets/templates/README.md` 渲染，用 `python repo-i18n/scripts/clear_run.py` 重新生成。详细指南见 `repo-i18n/references/`。
 
-## License
+## 许可证
 
 MIT © Skills Contributors
