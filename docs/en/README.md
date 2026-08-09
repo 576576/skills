@@ -8,8 +8,6 @@
   <img src="https://img.shields.io/badge/license-MIT-green" alt="License">
 </p>
 
----
-
 ## Intro
 
 A collection of reusable agent skills created by 576576.

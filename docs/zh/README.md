@@ -8,8 +8,6 @@
   <img src="https://img.shields.io/badge/license-MIT-green" alt="License">
 </p>
 
----
-
 ## 简介
 
 可复用的智能体技能集合，由576576创建。

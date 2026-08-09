@@ -174,12 +174,16 @@ def bundles_sorted():
 
 
 def load_docs_by_code():
-    """All locale docs, keyed by langCode (missing/invalid files skipped)."""
+    """All locale docs, keyed by file stem (zh.json -> zh, zh-Hant.json ->
+    zh-Hant). The docs JSON `langCode` is the *base* language (e.g. zh-Hant
+    -> zh); the unique code is the file name, which drives paths and links.
+    """
     docs = {}
     for path in glob.glob("assets/docs/*.json"):
         d = load_json(path)
         if d and d.get("langCode"):
-            docs[d["langCode"]] = d
+            code = os.path.splitext(os.path.basename(path))[0]
+            docs[code] = d
     return docs
 
 
@@ -208,12 +212,15 @@ def shared_label(lang, region, counts):
 def render_languages(cur_code, doc_prefix, objs, counts):
     items = []
     for o in objs:
+        # unique code: an injected `code` (docs, from the file name) wins;
+        # bundles carry the full locale in `langCode`.
+        code = o.get("code") or o.get("langCode", "")
         label = shared_label(o.get("lang", o.get("langCode", "")),
                              o.get("langRegion", ""), counts)
-        if o.get("langCode") == cur_code:
+        if code == cur_code:
             items.append(label)  # current language = plain text
         else:
-            items.append(f'<a href="{doc_prefix}{o["langCode"]}/README.md">{label}</a>')
+            items.append(f'<a href="{doc_prefix}{code}/README.md">{label}</a>')
     return " &nbsp;|&nbsp; ".join(items)
 
 
@@ -385,7 +392,7 @@ def main(argv=None):
     # Language order mirrors the file-path sort (reverse-alphabetical), so
     # zh-Hant.json sorts before zh.json -> [zh, zh-Hant, en] in display order.
     objs = bundles if bundles else [
-        docs_by_code[c] for c in sorted(
+        {**docs_by_code[c], "code": c} for c in sorted(
             docs_by_code, key=lambda c: f"{c}.json", reverse=True)]
     counts = lang_counts(objs)
     _, fallback_map = parse_i18n_config()

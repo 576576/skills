@@ -7,7 +7,10 @@
    (`zh.json`) and only override keys that differ. Set `langCode` to the **full**
    locale code (`zh-Hant`, not `zh`). Missing keys fall back per the `fallback`
    tree in `assets/.i18n_config/i18n.yml` (recursive; default: variant → base → en).
-2. `assets/docs/{code}.json` — copy `en.json`, translate all fields.
+2. `assets/docs/{code}.json` — copy `en.json`, translate all fields. Set
+   `langCode` to the **base** language code (`zh-Hant` → `zh`); the unique
+   code is the **file name** (`zh-Hant.json` → `zh-Hant`), which drives
+   `docs/{code}/` paths and the language links.
 3. App-side locale registry:
    - add the locale to the supported-locales list (use script variants for e.g. `zh-Hant`);
    - add/update the UI key set if any key changed.
