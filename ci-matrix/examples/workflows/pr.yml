@@ -1,0 +1,36 @@
+name: PR
+
+# PR gate: the same reusable gate the release path uses, plus a build to answer
+# "does it still compile?" — nothing is packaged and nothing is published.
+#
+# No paths / paths-ignore here on purpose: a workflow skipped by a filter is
+# *absent*, so the PR would show no check at all and a required check would stay
+# pending forever.
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+# Superseded runs are worthless and hold runners.
+concurrency:
+  group: pr-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: 质量门禁
+    permissions:
+      contents: read
+    uses: ./.github/workflows/lint.yml
+
+  build:
+    name: 构建检查
+    # Only the shape of the gate: pack_artifacts stays off, so no artifacts are
+    # uploaded and nothing can be published from a PR.
+    permissions:
+      contents: read
+    uses: ./.github/workflows/build.yml
+    with:
+      version_name: ''
+      targets: >-
+        [{"runner":"ubuntu-latest","target":"x86_64-unknown-linux-gnu","artifact":"app-linux-x64"}]

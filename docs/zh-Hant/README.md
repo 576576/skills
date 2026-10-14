@@ -16,9 +16,14 @@
 
  技能 | 用途
  --- | ---
+ ci-matrix | GitHub Actions 六件套 CI 的设计与本地校验
  repo-i18n | 通过 JSON 语言包管理多语言文档
 
 ---
+
+## ci-matrix
+
+**ci-matrix** —— 设计与校验一套多 workflow 的 GitHub Actions CI：一个可复用的质量门禁（`lint.yml`）、一个可复用的构建（`build.yml`）、一个唯一发布入口（`release.yml`），外加 PR 把关、预发布清理与 i18n 更新，共六个文件、每个只有一个触发面。含逐文件的触发/调用矩阵与其背后的规则，以及 `examples/verify_workflows.py`：离线检查 YAML、每个 `run:` 块的 `bash -n`、`uses:` 指向的文件、`with:` 输入契约与 PR 上的路径过滤。
 
 ## repo-i18n
 

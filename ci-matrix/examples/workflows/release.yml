@@ -1,0 +1,134 @@
+name: Release
+
+# The only entry point. Pushes to main and manual dispatches both come through
+# here, so no path can bypass the gate. Everything downstream is a `uses:` call.
+on:
+  push:
+    branches: [main]
+    # A docs-only push should not burn a matrix run and publish a build.
+    # Precondition: nothing in the build reads a .md file — verify before adding.
+    # Both patterns are listed: whether `**/` matches zero directory levels is
+    # implementation-defined.
+    paths-ignore:
+      - 'docs/**'
+      - '*.md'
+      - '**/*.md'
+  workflow_dispatch:
+    inputs:
+      channel:
+        description: Release channel
+        required: true
+        default: alpha
+        type: choice
+        options: [alpha, beta, release]
+
+jobs:
+  prep:
+    name: prepare
+    runs-on: ubuntu-latest
+    outputs:
+      channel: ${{ steps.out.outputs.channel }}
+      version_name: ${{ steps.out.outputs.version_name }}
+      tag: ${{ steps.out.outputs.tag }}
+      targets: ${{ steps.out.outputs.targets }}
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          # Version numbers derived from the commit count need full history.
+          fetch-depth: 0
+      - id: out
+        name: Compute version and matrix
+        shell: bash
+        run: |
+          set -euo pipefail
+          # Dispatch inputs do not exist on push — branch on the event instead of
+          # reading an input that is an empty string there.
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            CHANNEL="${{ github.event.inputs.channel }}"
+          else
+            CHANNEL="alpha"
+          fi
+
+          COUNT="$(git rev-list HEAD --count)"
+          if [ "$CHANNEL" = "release" ]; then
+            VER="$((COUNT/1000)).$(((COUNT/100)%10)).$((COUNT%100))"
+          else
+            VER="r${COUNT}"
+          fi
+          case "$CHANNEL" in
+            alpha) TAG="${VER}-alpha.${{ github.run_id }}" ;;
+            beta)  TAG="${VER}-beta.${{ github.run_id }}" ;;
+            *)     TAG="${VER}" ;;
+          esac
+
+          # The target matrix lives here, once. Third column is the artifact name.
+          TARGETS="$(python3 - "$CHANNEL" <<'PY'
+          import json, sys
+          channel = sys.argv[1]
+          rows = [("ubuntu-latest",    "x86_64-unknown-linux-gnu",  "linux-x64"),
+                  ("windows-latest",   "x86_64-pc-windows-msvc",    "windows-x64"),
+                  ("macos-15",         "aarch64-apple-darwin",      "macos-arm64")]
+          if channel != "release":
+              rows = rows[:2]                     # cheaper matrix for pre-releases
+          print(json.dumps([{"runner": r, "target": t, "artifact": f"app-{a}"}
+                            for r, t, a in rows]))
+          PY
+          )"
+
+          {
+            echo "channel=$CHANNEL"
+            echo "version_name=$VER"
+            echo "tag=$TAG"
+            echo "targets=$TARGETS"
+          } >> "$GITHUB_OUTPUT"
+
+  lint:
+    name: 质量门禁
+    # Gate as a job, not as a step: a failure here leaves build *skipped*, so no
+    # release can exist without a green gate.
+    permissions:
+      contents: read
+    uses: ./.github/workflows/lint.yml
+
+  build:
+    name: 构建
+    needs: [prep, lint]
+    # A called workflow's permissions cannot exceed the caller's.
+    permissions:
+      contents: read
+    uses: ./.github/workflows/build.yml
+    with:
+      version_name: ${{ needs.prep.outputs.version_name }}
+      targets: ${{ needs.prep.outputs.targets }}
+      pack_artifacts: true
+
+  publish:
+    name: publish ${{ needs.prep.outputs.channel }} (${{ needs.prep.outputs.tag }})
+    needs: [prep, build]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0        # shallow clones have no local tags
+      - uses: actions/download-artifact@v8
+        with:
+          path: out
+          merge-multiple: true
+      - name: Tag and release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ needs.prep.outputs.tag }}
+          CHANNEL: ${{ needs.prep.outputs.channel }}
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag "$TAG"
+          git push origin "$TAG"
+
+          PRE=""
+          [ "$CHANNEL" != "release" ] && PRE="--prerelease"
+          # shellcheck disable=SC2086
+          gh release create "$TAG" out/* --title "$TAG" --generate-notes $PRE

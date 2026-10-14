@@ -1,0 +1,63 @@
+name: Build
+
+# Reusable build. Triggered only through workflow_call: the version and the
+# target matrix are computed by the caller's prep job and passed in — this file
+# must not re-derive them, or the artifact names and the release tag can disagree
+# on the edge cases.
+on:
+  workflow_call:
+    inputs:
+      version_name:
+        description: Version string baked into the artifact (caller computed)
+        required: true
+        type: string
+      targets:
+        description: JSON array for matrix.include (may be [] to build nothing)
+        required: true
+        type: string
+      pack_artifacts:
+        description: Package and upload artifacts (off for PR builds)
+        required: false
+        type: boolean
+        default: false
+
+jobs:
+  build:
+    name: build ${{ matrix.target }}
+    # An empty matrix is an error in Actions, not a no-op — skip explicitly.
+    if: inputs.targets != '[]'
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      # Keep going after a failure: one round should report every broken target.
+      fail-fast: false
+      matrix:
+        include: ${{ fromJson(inputs.targets) }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: package.json
+          cache: pnpm
+      - name: Install modules
+        run: pnpm ci
+      - name: Build
+        env:
+          TARGET: ${{ matrix.target }}
+          VERSION: ${{ inputs.version_name }}
+        run: pnpm build
+      - name: Package
+        if: ${{ inputs.pack_artifacts }}
+        env:
+          TARGET: ${{ matrix.target }}
+          VERSION: ${{ inputs.version_name }}
+        run: ./scripts/package.sh "$TARGET" "$VERSION"   # writes dist/<name>
+      - name: Upload artifact
+        if: ${{ inputs.pack_artifacts }}
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ matrix.artifact }}
+          path: dist/*
+          # Default is a warning: an empty artifact then surfaces two jobs later
+          # as "no assets", with the real cause already scrolled away.
+          if-no-files-found: error

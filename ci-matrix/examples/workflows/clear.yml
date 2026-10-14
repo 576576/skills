@@ -1,0 +1,131 @@
+name: Clear Pre-release
+
+# Manual only: keep the newest pre-release inside every <window_hours> window,
+# delete the rest. Stable releases are never touched.
+on:
+  workflow_dispatch:
+    inputs:
+      window_hours:
+        description: Keep window in hours — one pre-release kept per window
+        type: string
+        default: '24'
+      dry_run:
+        description: Preview only (uncheck to really delete)
+        type: boolean
+        default: true
+      cleanup_tag:
+        description: Delete the associated tag as well
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+
+jobs:
+  clear:
+    name: clear
+    runs-on: ubuntu-latest
+    steps:
+      # `gh release delete --cleanup-tag` deletes the *local* tag too, so a real
+      # repository with all tags present is required.
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Plan
+        env:
+          GH_TOKEN: ${{ github.token }}
+          WINDOW_HOURS: ${{ github.event.inputs.window_hours }}
+          DRY_RUN: ${{ github.event.inputs.dry_run }}
+        run: |
+          set -euo pipefail
+          # Paginate: there are always more releases than fit on one page.
+          gh api --paginate "repos/${GITHUB_REPOSITORY}/releases?per_page=100" > /tmp/releases.json
+          python3 - <<'PY'
+          import json, os, sys
+          from datetime import datetime, timedelta, timezone
+
+          def die(msg):
+              print(f"::error::{msg}")
+              sys.exit(1)
+
+          try:
+              window = float((os.environ.get("WINDOW_HOURS") or "").strip() or "24")
+          except ValueError:
+              die("window_hours is not a number")
+          if window <= 0:
+              die("window_hours must be positive")
+          dry = (os.environ.get("DRY_RUN") or "").strip().lower() == "true"
+
+          raw = open("/tmp/releases.json", encoding="utf-8").read().strip()
+          if not raw:
+              die("empty release list")
+
+          # gh --paginate may emit one array or several concatenated ones.
+          dec, items, i = json.JSONDecoder(), [], 0
+          while i < len(raw):
+              obj, i = dec.raw_decode(raw, i)
+              items.extend(obj if isinstance(obj, list) else [obj])
+              while i < len(raw) and raw[i] in " \t\r\n,":
+                  i += 1
+
+          def when(r):
+              v = r.get("created_at") or r.get("published_at") or ""
+              return (datetime.fromisoformat(v.replace("Z", "+00:00"))
+                      if v else datetime.min.replace(tzinfo=timezone.utc))
+
+          pre = [r for r in items if r.get("prerelease") and not r.get("draft")]
+          if not pre:
+              print("no pre-releases")
+              sys.exit(0)
+
+          pre.sort(key=when, reverse=True)
+          keep, drop, anchor = [], [], None
+          for r in pre:
+              t = when(r)
+              if anchor is None or (anchor - t) >= timedelta(hours=window):
+                  keep.append(r["tag_name"])
+                  anchor = t
+              else:
+                  drop.append(r["tag_name"])
+
+          print(f"pre-releases: {len(pre)} — keep {len(keep)}, delete {len(drop)} "
+                f"(window {window:g}h)")
+          # Oldest first: if the loop dies halfway, the newest survive.
+          open("/tmp/delete.txt", "w", encoding="utf-8", newline="\n").write(
+              "".join(f"{t}\n" for t in reversed(drop)))
+          print("dry run" if dry else "will delete")
+          PY
+
+      - name: Delete
+        if: ${{ github.event.inputs.dry_run != 'true' }}
+        env:
+          GH_TOKEN: ${{ github.token }}
+          CLEANUP_TAG: ${{ github.event.inputs.cleanup_tag }}
+        run: |
+          set -euo pipefail
+          # Without a checkout every deletion fails with an unhelpful error.
+          git rev-parse --git-dir >/dev/null 2>&1 || {
+            echo "::error::not a git repository — gh release delete cannot work"
+            exit 1
+          }
+          if [ ! -s /tmp/delete.txt ]; then
+            echo "nothing to delete"
+            exit 0
+          fi
+
+          FLAG=""
+          [ "$CLEANUP_TAG" = "true" ] && FLAG="--cleanup-tag"
+
+          ok=0; fail=0
+          while IFS= read -r tag; do
+            [ -n "$tag" ] || continue
+            if gh release delete "$tag" --yes $FLAG; then
+              echo "deleted $tag"; ok=$((ok + 1))
+            else
+              # One protected tag must not stop the rest of the cleanup.
+              echo "::warning::failed to delete $tag"; fail=$((fail + 1))
+            fi
+          done < /tmp/delete.txt
+          echo "deleted $ok, failed $fail"
+          [ "$fail" -gt 0 ] && echo "::warning::$fail deletions failed"

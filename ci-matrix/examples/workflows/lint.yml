@@ -1,0 +1,33 @@
+name: Lint
+
+# The quality gate. Reusable: called by release.yml and pr.yml, or run alone via
+# workflow_dispatch. It has no face of its own — putting pull_request here would
+# give the same file two semantics (verify vs publish) and two permission sets.
+#
+# This file holds the only copy of the commands. Callers use `uses:`.
+on:
+  workflow_call:
+  workflow_dispatch:
+
+jobs:
+  check:
+    name: check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v6
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: package.json
+          cache: pnpm
+      - name: Install modules
+        run: pnpm ci
+      - name: Lint
+        run: pnpm lint
+      - name: Format check
+        run: pnpm format:check
+      - name: Typecheck
+        run: pnpm typecheck
+      - name: Test
+        # --no-fail-fast style: collect every failure in one round, not the first.
+        run: pnpm test

@@ -1,0 +1,64 @@
+name: Update i18n
+
+# Pull translations and commit them back.
+#
+# The trigger face matches its siblings (push to main + dispatch); the *filter*
+# lives on the job, so an ordinary push shows up as one skipped job instead of a
+# red X on every delivery.
+#
+# NOT WIRED YET? Then keep this shape but make the work step fail loudly with the
+# missing prerequisites (no token, no source configured) — a skeleton that no-ops
+# successfully teaches everyone that translations are flowing when they are not:
+#
+#     - run: |
+#         echo "::error::update_i18n is not wired up: set WEBLATE_TOKEN (see header)"
+#         exit 1
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  update-i18n:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      contains(github.event.head_commit.message, 'Translations update from Hosted Weblate')
+    runs-on: ubuntu-latest
+    # Needed to push the regenerated files back.
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: main
+          fetch-depth: 0
+
+      - name: Pull translations
+        env:
+          WEBLATE_TOKEN: ${{ secrets.WEBLATE_TOKEN }}
+        run: |
+          set -euo pipefail
+          # One file per language; the API path is /api/components/<project>/<component>/
+          # translations/<lang>/file/
+          for lang in de fr zh_Hans; do
+            mkdir -p "src/i18n/locales"
+            curl -fsS -H "Authorization: Token $WEBLATE_TOKEN" \
+              "${{ vars.WEBLATE_BASE }}/api/components/${GITHUB_REPOSITORY##*/}/app/translations/${lang}/file/" \
+              -o "src/i18n/locales/${lang}.json"
+          done
+
+      - name: Regenerate derived files
+        run: ./scripts/gen-i18n-resources.sh
+
+      - name: Commit and push
+        run: |
+          set -euo pipefail
+          if [ -z "$(git status --porcelain)" ]; then
+            echo "nothing changed"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "i18n: sync translations"
+          git push origin HEAD

@@ -16,9 +16,14 @@ A collection of reusable agent skills created by 576576.
 
  Skill | Purpose
  --- | ---
+ ci-matrix | Design and verify a six-workflow GitHub Actions CI
  repo-i18n | Manage multi-language docs via JSON
 
 ---
+
+## ci-matrix
+
+**ci-matrix** — Design and verify a multi-workflow GitHub Actions CI: one reusable quality gate (`lint.yml`), one reusable build (`build.yml`), one release entry point (`release.yml`), plus a PR gate, a pre-release cleaner and an i18n updater — six files, each with a single trigger face. Ships the per-file trigger/call matrix and the rules behind it, plus `examples/verify_workflows.py`, which checks YAML, every `run:` block via `bash -n`, `uses:` targets, the `with:` input contract and PR path filters — offline, before pushing.
 
 ## repo-i18n
 

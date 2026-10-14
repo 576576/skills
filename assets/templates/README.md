@@ -17,10 +17,15 @@
  {{features.title.0}} | {{features.title.1}}
  --- | ---
  {{features.feat1.0}} | {{features.feat1.1}}
+ {{features.feat2.0}} | {{features.feat2.1}}
 
 ---
 
 ## {{headings.block3}}
+
+{{skills.ci-matrix}}
+
+## {{headings.block4}}
 
 {{skills.repo-i18n}}
 

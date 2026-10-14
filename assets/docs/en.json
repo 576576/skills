@@ -12,7 +12,8 @@
   "headings": {
     "block1": "Intro",
     "block2": "Features",
-    "block3": "repo-i18n",
+    "block3": "ci-matrix",
+    "block4": "repo-i18n",
     "license": "License"
   },
 
@@ -24,11 +25,13 @@
   "_comment_block2": "── Features ──",
   "features": {
     "title": ["Skill", "Purpose"],
-    "feat1": ["repo-i18n", "Manage multi-language docs via JSON"]
+    "feat1": ["ci-matrix", "Design and verify a six-workflow GitHub Actions CI"],
+    "feat2": ["repo-i18n", "Manage multi-language docs via JSON"]
   },
 
   "_comment_block3": "── Skill usage (one block per skill, sorted) ──",
   "skills": {
+    "ci-matrix": "**ci-matrix** — Design and verify a multi-workflow GitHub Actions CI: one reusable quality gate (`lint.yml`), one reusable build (`build.yml`), one release entry point (`release.yml`), plus a PR gate, a pre-release cleaner and an i18n updater — six files, each with a single trigger face. Ships the per-file trigger/call matrix and the rules behind it, plus `examples/verify_workflows.py`, which checks YAML, every `run:` block via `bash -n`, `uses:` targets, the `with:` input contract and PR path filters — offline, before pushing.",
     "repo-i18n": "**repo-i18n** — Manage repository multi-language docs: translations live in `assets/docs/*.json`, rendered from `assets/templates/README.md`. `repo-i18n/scripts/render_i18n.py` runs directly from the repo root and rewrites `README.md` + `docs/*/README.md` in place: `--once` is a one-shot clean run (no CI, ignores bundles, no `docs/i18n.md`); `--no-code` is the non-code mode (drops `platforms` before rendering, no platform badge)."
   }
 }
